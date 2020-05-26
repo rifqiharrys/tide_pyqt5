@@ -71,6 +71,16 @@ class TideWidget(QWidget):
 		self.utideButton = QRadioButton('U Tide')
 		# self.utideButton.toggled.connect()
 
+		startcalLabel = QLabel()
+		startcalLabel.setText('Start Date')
+		startcalLabel.setAlignment(Qt.AlignHCenter)
+		startcal = QCalendarWidget()
+
+		endcalLabel = QLabel()
+		endcalLabel.setText('End Date')
+		endcalLabel.setAlignment(Qt.AlignHCenter)
+		endcal = QCalendarWidget()
+
 		# plotButton.clicked.connect(self.plotLoad(dfRaw))
 
 
@@ -83,6 +93,8 @@ class TideWidget(QWidget):
 		vbox = QVBoxLayout()
 		hbox1 = QHBoxLayout()
 		hbox2 = QHBoxLayout()
+		hbox3 = QHBoxLayout()
+		hbox4 = QHBoxLayout()
 
 		hbox1.addWidget(fileLocButton)
 		hbox1.addWidget(plotObsButton)
@@ -101,9 +113,14 @@ class TideWidget(QWidget):
 		hbox2.addWidget(self.utideButton)
 		vbox.addLayout(hbox2)
 
-		startcal = QCalendarWidget()
-		# vbox.addWidget.(startcal)
-		endcal = QCalendarWidget()
+		# startcal.setGridVisible(True)
+		hbox3.addWidget(startcalLabel)
+		hbox3.addWidget(endcalLabel)
+		vbox.addLayout(hbox3)
+
+		hbox4.addWidget(startcal)
+		hbox4.addWidget(endcal)
+		vbox.addLayout(hbox4)
 
 
 		vbox.addWidget(vploadButton)

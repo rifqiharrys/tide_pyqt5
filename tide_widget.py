@@ -3,7 +3,9 @@
 import sys
 from pathlib import Path
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QRadioButton, QPushButton)
+from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
+							 QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QRadioButton, 
+							 QPushButton, QCalendarWidget)
 from PyQt5.QtGui import QIcon
 from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -98,6 +100,11 @@ class TideWidget(QWidget):
 		hbox2.addWidget(self.ttideButton)
 		hbox2.addWidget(self.utideButton)
 		vbox.addLayout(hbox2)
+
+		startcal = QCalendarWidget()
+		# vbox.addWidget.(startcal)
+		endcal = QCalendarWidget()
+
 
 		vbox.addWidget(vploadButton)
 		vbox.addWidget(plotButton)

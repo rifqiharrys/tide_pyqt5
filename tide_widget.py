@@ -39,22 +39,18 @@ class TideWidget(QWidget):
 		plotObsButton.clicked.connect(self.plotLoad)
 		locLabel = QLabel()
 		locLabel.setText('Insert file location:')
-		# locLabel.setAlignment(Qt.AlignLeft)
 		self.locLineForm = QLineEdit()
 
 		timeHeaderLabel = QLabel()
 		timeHeaderLabel.setText('Time Header:')
-		# timeHeaderLabel.setAlignment(Qt.AlignLeft)
 		self.timeHeaderLineForm = QLineEdit()
 
 		depthHeaderLabel = QLabel()
 		depthHeaderLabel.setText('Depth Header:')
-		# depthHeaderLabel.setAlignment(Qt.AlignLeft)
 		self.depthHeaderLineForm = QLineEdit()
 
 		dayFirstLabel = QLabel()
 		dayFirstLabel.setText('Day First:')
-		# dayFirstLabel.setAlignment(Qt.AlignLeft)
 		self.dayFirstCB = QComboBox()
 		self.dayFirstCB.addItems(['True', 'False'])
 		# self.dayFirstCB.currentIndexChanged.connect(self.selectionchange)

@@ -96,6 +96,7 @@ class TideWidget(QWidget):
 		hbox2 = QHBoxLayout()
 		hbox3 = QHBoxLayout()
 		hbox4 = QHBoxLayout()
+		hbox5 = QHBoxLayout()
 
 		hbox1.addWidget(fileLocButton)
 		hbox1.addWidget(plotObsButton)
@@ -104,9 +105,14 @@ class TideWidget(QWidget):
 		form.addRow(locLabel, self.locLineForm)
 		form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
 		form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
-		form.addRow(dayFirstLabel, self.dayFirstCB)
-		form.addRow(sepLabel, self.sepCB)
+		# form.addRow(dayFirstLabel, self.dayFirstCB)
+		# form.addRow(sepLabel, self.sepCB)
 		vbox.addLayout(form)
+		hbox5.addWidget(dayFirstLabel)
+		hbox5.addWidget(self.dayFirstCB)
+		hbox5.addWidget(sepLabel)
+		hbox5.addWidget(self.sepCB)
+		vbox.addLayout(hbox5)
 
 		vbox.addWidget(self.dataFrame)
 
@@ -157,8 +163,7 @@ class TideWidget(QWidget):
 	def str2bool(self, v):
 		return v in ('True')
 
-
-	def plotLoad(self):
+	def inputDict(self):
 
 		location = self.locLineForm.text()
 		time = self.timeHeaderLineForm.text()
@@ -167,10 +172,18 @@ class TideWidget(QWidget):
 		sepDict = {'Tab':'\t', 'Space':' ', 'Semicolon':';'}
 		sepSelect = sepDict[self.sepCB.currentText()]
 
-		raw = pd.read_csv(location, sep=sepSelect, index_col=time)
-		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
+		input_dict = {'location':location, 'time':time, 'depth':depth, 'dayfirst':dayF, 'separator':sepSelect}
 
-		ad = raw[depth].values
+		return input_dict
+
+	def plotLoad(self):
+
+		input_dict = self.inputDict()
+
+		raw = pd.read_csv(input_dict['location'], sep=input_dict['separator'], index_col=input_dict['time'])
+		raw.index = pd.to_datetime(raw.index, dayfirst=input_dict['dayfirst'])
+
+		ad = raw[input_dict['depth']].values
 		at = raw.index
 
 		plt.figure(figsize=(10, 5))

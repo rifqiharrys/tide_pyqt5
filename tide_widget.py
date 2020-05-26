@@ -75,12 +75,13 @@ class TideWidget(QWidget):
 		hbox1.addWidget(fileLocButton)
 		hbox1.addWidget(plotObsButton)
 		vbox.addLayout(hbox1)
+
 		form.addRow(locLabel, self.locLineForm)
-		# form.addRow(fileLocButton, plotObsButton)
 		form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
 		form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
 		form.addRow(dayFirstLabel, self.dayFirstCB)
 		vbox.addLayout(form)
+		
 		vbox.addWidget(self.dataFrame)
 		vbox.addWidget(vploadButton)
 		vbox.addWidget(plotButton)

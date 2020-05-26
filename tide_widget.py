@@ -164,8 +164,10 @@ class TideWidget(QWidget):
 		time = self.timeHeaderLineForm.text()
 		depth = self.depthHeaderLineForm.text()
 		dayF = self.str2bool(self.dayFirstCB.currentText())
+		sepDict = {'Tab':'\t', 'Space':' ', 'Semicolon':';'}
+		sepSelect = sepDict[self.sepCB.currentText()]
 
-		raw = pd.read_csv(location, sep='\t', index_col=time)
+		raw = pd.read_csv(location, sep=sepSelect, index_col=time)
 		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
 
 		ad = raw[depth].values

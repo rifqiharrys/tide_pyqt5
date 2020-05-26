@@ -117,6 +117,7 @@ class TideWidget(QWidget):
 		time = self.timeHeaderLineForm.text()
 		depth = self.depthHeaderLineForm.text()
 		dayF = bool(self.dayFirstCB.currentText())
+		print(dayF)
 		# dayFbool = bool(dayF)
 		raw = pd.read_csv(location, sep='\t', index_col=time)
 		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)

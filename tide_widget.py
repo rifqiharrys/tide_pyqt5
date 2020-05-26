@@ -27,7 +27,7 @@ class TideWidget(QWidget):
 
 	def initUI(self):
 
-		self.setGeometry(300, 300, 480, 640)
+		self.setGeometry(300, 100, 480, 640)
 		self.setWindowTitle('Tide')
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 

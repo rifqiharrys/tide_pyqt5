@@ -81,7 +81,7 @@ class TideWidget(QWidget):
 		form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
 		form.addRow(dayFirstLabel, self.dayFirstCB)
 		vbox.addLayout(form)
-		
+
 		vbox.addWidget(self.dataFrame)
 		vbox.addWidget(vploadButton)
 		vbox.addWidget(plotButton)

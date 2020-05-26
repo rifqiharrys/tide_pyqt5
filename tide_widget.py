@@ -3,7 +3,7 @@
 import sys
 from pathlib import Path
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QInputDialog, QAction, QFormLayout, QHBoxLayout, QVBoxLayout, QLabel, QPushButton)
+from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QPushButton)
 from PyQt5.QtGui import QIcon
 from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -38,15 +38,25 @@ class TideWidget(QWidget):
 		locLabel = QLabel()
 		locLabel.setText('Insert file location:')
 		locLabel.setAlignment(Qt.AlignLeft)
+		self.locLineForm = QLineEdit()
+
 		timeHeaderLabel = QLabel()
 		timeHeaderLabel.setText('Time Header:')
 		timeHeaderLabel.setAlignment(Qt.AlignLeft)
+		self.timeHeaderLineForm = QLineEdit()
+
 		depthHeaderLabel = QLabel()
 		depthHeaderLabel.setText('Depth Header:')
 		depthHeaderLabel.setAlignment(Qt.AlignLeft)
-		self.locLineForm = QLineEdit()
-		self.timeHeaderLineForm = QLineEdit()
 		self.depthHeaderLineForm = QLineEdit()
+
+		dayFirstLabel = QLabel()
+		dayFirstLabel.setText('Day First:')
+		dayFirstLabel.setAlignment(Qt.AlignLeft)
+		self.dayFirstCB = QComboBox()
+		self.dayFirstCB.addItems(['True', 'False'])
+		# self.dayFirstCB.currentIndexChanged.connect(self.selectionchange)
+
 		self.dataFrame = QTextBrowser()
 		vploadButton = QPushButton('Load Valeport Data')
 		plotButton = QPushButton('Plot Loaded Data')
@@ -62,12 +72,6 @@ class TideWidget(QWidget):
 		vbox = QVBoxLayout()
 		hbox1 = QHBoxLayout()
 
-		# grid.addWidget(locLabel, 1, 1)
-		# grid.addWidget(self.locLineForm, 1, 2)
-		# grid.addWidget(fileLocButton, 2, 1)
-		# grid.addWidget(plotObsButton, 2, 2)
-		# self.setLayout(grid)
-
 		hbox1.addWidget(fileLocButton)
 		hbox1.addWidget(plotObsButton)
 		vbox.addLayout(hbox1)
@@ -75,6 +79,7 @@ class TideWidget(QWidget):
 		# form.addRow(fileLocButton, plotObsButton)
 		form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
 		form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
+		form.addRow(dayFirstLabel, self.dayFirstCB)
 		vbox.addLayout(form)
 		vbox.addWidget(self.dataFrame)
 		vbox.addWidget(vploadButton)
@@ -111,9 +116,10 @@ class TideWidget(QWidget):
 		location = self.locLineForm.text()
 		time = self.timeHeaderLineForm.text()
 		depth = self.depthHeaderLineForm.text()
-		
+		dayF = bool(self.dayFirstCB.currentText())
+		# dayFbool = bool(dayF)
 		raw = pd.read_csv(location, sep='\t', index_col=time)
-		raw.index = pd.to_datetime(raw.index, dayfirst=True)
+		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
 
 		ad = raw[depth].values
 		at = raw.index
@@ -126,12 +132,9 @@ class TideWidget(QWidget):
 		plt.show()
 
 
-	def showDialog(self):
-		text, ok = QInputDialog.getText(self, 'Input Dialog',
-										'Enter your name:')
+	# def dayFirst(self, i):
 
-		if ok:
-			self.le.setText(str(text))
+	# 	for count in range (self.dayFirstCB.count()):
 
 
 

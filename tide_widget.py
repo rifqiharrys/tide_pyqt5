@@ -111,14 +111,17 @@ class TideWidget(QWidget):
 		# return raw
 
 
+	def str2bool(self, v):
+		return v in ('True')
+
+
 	def plotLoad(self):
 
 		location = self.locLineForm.text()
 		time = self.timeHeaderLineForm.text()
 		depth = self.depthHeaderLineForm.text()
-		dayF = bool(self.dayFirstCB.currentText())
-		print(dayF)
-		# dayFbool = bool(dayF)
+		dayF = self.str2bool(self.dayFirstCB.currentText())
+
 		raw = pd.read_csv(location, sep='\t', index_col=time)
 		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
 
@@ -131,7 +134,6 @@ class TideWidget(QWidget):
 		plt.ylabel('Ketinggian Muka Air dari Sensor (m)')
 		plt.legend(loc='best')
 		plt.show()
-
 
 	# def dayFirst(self, i):
 

@@ -55,6 +55,11 @@ class TideWidget(QWidget):
 		self.dayFirstCB.addItems(['True', 'False'])
 		# self.dayFirstCB.currentIndexChanged.connect(self.selectionchange)
 
+		sepLabel = QLabel()
+		sepLabel.setText('Separator:')
+		self.sepCB = QComboBox()
+		self.sepCB.addItems(['Tab', 'Space', 'Semicolon'])
+
 		self.dataFrame = QTextBrowser()
 		vploadButton = QPushButton('Load Valeport Data')
 		plotButton = QPushButton('Plot Loaded Data')
@@ -100,6 +105,7 @@ class TideWidget(QWidget):
 		form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
 		form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
 		form.addRow(dayFirstLabel, self.dayFirstCB)
+		form.addRow(sepLabel, self.sepCB)
 		vbox.addLayout(form)
 
 		vbox.addWidget(self.dataFrame)

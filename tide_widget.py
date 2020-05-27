@@ -4,8 +4,8 @@ import sys
 from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
-							 QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QRadioButton, 
-							 QPushButton, QCalendarWidget)
+							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
+							 QRadioButton, QPushButton, QCalendarWidget)
 from PyQt5.QtGui import QIcon
 from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -75,12 +75,12 @@ class TideWidget(QWidget):
 		startcalLabel = QLabel()
 		startcalLabel.setText('Start Date')
 		startcalLabel.setAlignment(Qt.AlignHCenter)
-		startcal = QCalendarWidget()
+		self.startcal = QCalendarWidget()
 
 		endcalLabel = QLabel()
 		endcalLabel.setText('End Date')
 		endcalLabel.setAlignment(Qt.AlignHCenter)
-		endcal = QCalendarWidget()
+		self.endcal = QCalendarWidget()
 
 		# plotButton.clicked.connect(self.plotLoad(dfRaw))
 
@@ -88,55 +88,81 @@ class TideWidget(QWidget):
 
 		aboutButton = QPushButton('About')
 
-		# grid = QGridLayout()
-
-		form = QFormLayout()
+		grid = QGridLayout()
 		vbox = QVBoxLayout()
-		hbox1 = QHBoxLayout()
-		hbox2 = QHBoxLayout()
-		hbox3 = QHBoxLayout()
-		hbox4 = QHBoxLayout()
-		hbox5 = QHBoxLayout()
-
-		hbox1.addWidget(fileLocButton)
-		hbox1.addWidget(plotObsButton)
-		vbox.addLayout(hbox1)
-
-		form.addRow(locLabel, self.locLineForm)
-		form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
-		form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
-		# form.addRow(dayFirstLabel, self.dayFirstCB)
-		# form.addRow(sepLabel, self.sepCB)
-		vbox.addLayout(form)
-		hbox5.addWidget(dayFirstLabel)
-		hbox5.addWidget(self.dayFirstCB)
-		hbox5.addWidget(sepLabel)
-		hbox5.addWidget(self.sepCB)
-		vbox.addLayout(hbox5)
-
-		vbox.addWidget(self.dataFrame)
-
-		vbox.addWidget(tideAnalysisLabel)
-		hbox2.addWidget(self.ttideButton)
-		hbox2.addWidget(self.utideButton)
-		vbox.addLayout(hbox2)
-
-		# startcal.setGridVisible(True)
-		hbox3.addWidget(startcalLabel)
-		hbox3.addWidget(endcalLabel)
-		vbox.addLayout(hbox3)
-
-		hbox4.addWidget(startcal)
-		hbox4.addWidget(endcal)
-		vbox.addLayout(hbox4)
+		
+		grid.addWidget(fileLocButton, 1, 1, 1, 1)
+		grid.addWidget(self.locLineForm, 1, 2, 1, 2)
+		grid.addWidget(plotObsButton, 1, 4, 1, 1)
+		grid.addWidget(timeHeaderLabel, 2, 1, 1, 1)
+		grid.addWidget(self.timeHeaderLineForm, 2, 2, 1, 1)
+		grid.addWidget(depthHeaderLabel, 2, 3, 1, 1)
+		grid.addWidget(self.depthHeaderLineForm, 2, 4, 1, 1)
+		grid.addWidget(dayFirstLabel, 3, 1, 1, 1)
+		grid.addWidget(self.dayFirstCB, 3, 2, 1, 1)
+		grid.addWidget(sepLabel, 3, 3, 1, 1)
+		grid.addWidget(self.sepCB, 3, 4, 1, 1)
+		grid.addWidget(self.dataFrame, 4, 1, 4, 4)
+		grid.addWidget(tideAnalysisLabel, 8, 1, 1, 4)
+		grid.addWidget(self.ttideButton, 9, 1, 1, 2)
+		grid.addWidget(self.utideButton, 9, 3, 1, 2)
+		grid.addWidget(startcalLabel, 10, 1, 1, 2)
+		grid.addWidget(endcalLabel, 10, 3, 1, 2)
+		grid.addWidget(self.startcal, 11, 1, 1, 2)
+		grid.addWidget(self.endcal, 11, 3, 1, 2)
 
 
-		vbox.addWidget(vploadButton)
-		vbox.addWidget(plotButton)
 		vbox.addStretch(1)
-		vbox.addWidget(aboutButton)
-		# self.setLayout(form)
-		self.setLayout(vbox)
+		grid.addLayout(vbox, 20, 1)
+		self.setLayout(grid)
+
+		# form = QFormLayout()
+		# vbox = QVBoxLayout()
+		# hbox1 = QHBoxLayout()
+		# hbox2 = QHBoxLayout()
+		# hbox3 = QHBoxLayout()
+		# hbox4 = QHBoxLayout()
+		# hbox5 = QHBoxLayout()
+
+		# hbox1.addWidget(fileLocButton)
+		# hbox1.addWidget(plotObsButton)
+		# vbox.addLayout(hbox1)
+
+		# form.addRow(locLabel, self.locLineForm)
+		# form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
+		# form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
+		# # form.addRow(dayFirstLabel, self.dayFirstCB)
+		# # form.addRow(sepLabel, self.sepCB)
+		# vbox.addLayout(form)
+		# hbox5.addWidget(dayFirstLabel)
+		# hbox5.addWidget(self.dayFirstCB)
+		# hbox5.addWidget(sepLabel)
+		# hbox5.addWidget(self.sepCB)
+		# vbox.addLayout(hbox5)
+
+		# vbox.addWidget(self.dataFrame)
+
+		# vbox.addWidget(tideAnalysisLabel)
+		# hbox2.addWidget(self.ttideButton)
+		# hbox2.addWidget(self.utideButton)
+		# vbox.addLayout(hbox2)
+
+		# # startcal.setGridVisible(True)
+		# hbox3.addWidget(startcalLabel)
+		# hbox3.addWidget(endcalLabel)
+		# vbox.addLayout(hbox3)
+
+		# hbox4.addWidget(self.startcal)
+		# hbox4.addWidget(self.endcal)
+		# vbox.addLayout(hbox4)
+
+
+		# vbox.addWidget(vploadButton)
+		# vbox.addWidget(plotButton)
+		# vbox.addStretch(1)
+		# vbox.addWidget(aboutButton)
+		# # self.setLayout(form)
+		# self.setLayout(vbox)
 
 
 	def pathDialog(self):
@@ -172,7 +198,13 @@ class TideWidget(QWidget):
 		sepDict = {'Tab':'\t', 'Space':' ', 'Semicolon':';'}
 		sepSelect = sepDict[self.sepCB.currentText()]
 
-		input_dict = {'location':location, 'time':time, 'depth':depth, 'dayfirst':dayF, 'separator':sepSelect}
+		raw = pd.read_csv(location, sep=sepSelect, index_col=time)
+		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
+
+		depth_array = raw[depth].values
+		time_array = raw.index
+
+		input_dict = {'depth':depth_array, 'time':time_array}
 
 		return input_dict
 
@@ -180,11 +212,8 @@ class TideWidget(QWidget):
 
 		input_dict = self.inputDict()
 
-		raw = pd.read_csv(input_dict['location'], sep=input_dict['separator'], index_col=input_dict['time'])
-		raw.index = pd.to_datetime(raw.index, dayfirst=input_dict['dayfirst'])
-
-		ad = raw[input_dict['depth']].values
-		at = raw.index
+		ad = input_dict['depth']
+		at = input_dict['time']
 
 		plt.figure(figsize=(10, 5))
 		plt.plot(at, ad, label='Data Pasang Surut Sampel')

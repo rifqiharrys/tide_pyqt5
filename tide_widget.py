@@ -34,7 +34,7 @@ class TideWidget(QWidget):
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
 		fileLocButton = QPushButton('Open File Location')
-		fileLocButton.clicked.connect(self.pathDialog)
+		fileLocButton.clicked.connect(self.inputPathDialog)
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
 		locLabel = QLabel('Insert file location:')
@@ -180,7 +180,7 @@ class TideWidget(QWidget):
 		# self.setLayout(vbox)
 
 
-	def pathDialog(self):
+	def inputPathDialog(self):
 
 		home_dir = str(Path.home())
 		fname = QFileDialog.getOpenFileName(self, 'Load file', home_dir)

@@ -5,7 +5,7 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
-							 QRadioButton, QPushButton, QCalendarWidget)
+                             QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox)
 from PyQt5.QtGui import QIcon
 from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -37,26 +37,21 @@ class TideWidget(QWidget):
 		fileLocButton.clicked.connect(self.pathDialog)
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
-		locLabel = QLabel()
-		locLabel.setText('Insert file location:')
+		locLabel = QLabel('Insert file location:')
 		self.locLineForm = QLineEdit()
 
-		timeHeaderLabel = QLabel()
-		timeHeaderLabel.setText('Time Header:')
+		timeHeaderLabel = QLabel('Time Header:')
 		self.timeHeaderLineForm = QLineEdit()
 
-		depthHeaderLabel = QLabel()
-		depthHeaderLabel.setText('Depth Header:')
+		depthHeaderLabel = QLabel('Depth Header:')
 		self.depthHeaderLineForm = QLineEdit()
 
-		dayFirstLabel = QLabel()
-		dayFirstLabel.setText('Day First:')
+		dayFirstLabel = QLabel('Day First:')
 		self.dayFirstCB = QComboBox()
 		self.dayFirstCB.addItems(['True', 'False'])
 		# self.dayFirstCB.currentIndexChanged.connect(self.selectionchange)
 
-		sepLabel = QLabel()
-		sepLabel.setText('Separator:')
+		sepLabel = QLabel('Separator:')
 		self.sepCB = QComboBox()
 		self.sepCB.addItems(['Tab', 'Space', 'Semicolon'])
 
@@ -74,22 +69,26 @@ class TideWidget(QWidget):
 		self.utideButton = QRadioButton('U Tide')
 		self.utideButton.toggled.connect(self.methodButton)
 
+		latLabel = QLabel('Latitude (dd.ddddd):')
+		self.latDSB = QDoubleSpinBox()
+		self.latDSB.setRange(-90.0, 90.0)
+		self.latDSB.setDecimals(5)
+
+		self.saveLocForm = QLineEdit()
+		saveLocButton = QPushButton('Save File Location')
+
+		startcalLabel = QLabel('Start Date')
+		startcalLabel.setAlignment(Qt.AlignHCenter)
+		self.startcal = QCalendarWidget()
+
+		endcalLabel = QLabel('End Date')
+		endcalLabel.setAlignment(Qt.AlignHCenter)
+		self.endcal = QCalendarWidget()
+
 		solveButton = QPushButton('Analyse Tide')
 		solveButton.clicked.connect(self.analyseButton)
 		predicButton = QPushButton('Predict Tide')
 
-		startcalLabel = QLabel()
-		startcalLabel.setText('Start Date')
-		startcalLabel.setAlignment(Qt.AlignHCenter)
-		self.startcal = QCalendarWidget()
-
-		endcalLabel = QLabel()
-		endcalLabel.setText('End Date')
-		endcalLabel.setAlignment(Qt.AlignHCenter)
-		self.endcal = QCalendarWidget()
-
-		methodselectedlabel = QLabel()
-		
 
 		# plotButton.clicked.connect(self.plotLoad(dfRaw))
 
@@ -116,13 +115,16 @@ class TideWidget(QWidget):
 		grid.addWidget(tideAnalysisLabel, 8, 3, 1, 2)
 		grid.addWidget(self.ttideButton, 9, 1, 1, 2)
 		grid.addWidget(self.utideButton, 9, 3, 1, 2)
-		grid.addWidget(startcalLabel, 10, 1, 1, 2)
-		grid.addWidget(endcalLabel, 10, 3, 1, 2)
-		grid.addWidget(self.startcal, 11, 1, 1, 2)
-		grid.addWidget(self.endcal, 11, 3, 1, 2)
-		grid.addWidget(solveButton, 12, 1, 1, 2)
-		grid.addWidget(predicButton, 12, 3, 1, 2)
-		grid.addWidget(methodselectedlabel, 13, 1, 1, 4)
+		grid.addWidget(latLabel, 10, 1, 1, 1)
+		grid.addWidget(self.latDSB, 10, 2, 1, 1)
+		grid.addWidget(self.saveLocForm, 10, 3, 1, 1)
+		grid.addWidget(saveLocButton, 10, 4, 1, 1)
+		grid.addWidget(startcalLabel, 11, 1, 1, 2)
+		grid.addWidget(endcalLabel, 11, 3, 1, 2)
+		grid.addWidget(self.startcal, 12, 1, 1, 2)
+		grid.addWidget(self.endcal, 12, 3, 1, 2)
+		grid.addWidget(solveButton, 13, 1, 1, 2)
+		grid.addWidget(predicButton, 13, 3, 1, 2)
 
 
 		vbox.addStretch(1)
@@ -217,7 +219,11 @@ class TideWidget(QWidget):
 		depth_array = raw[depth].values
 		time_array = raw.index
 
-		input_dict = {'depth':depth_array, 'time':time_array}
+		startcal_string = self.startcal.selectedDate().toString(Qt.ISODate)
+		endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
+		# start_string = start.toString(Qt.ISODate)
+
+		input_dict = {'depth':depth_array, 'time':time_array, 'start':startcal_string, 'end':endcal_string}
 
 		return input_dict
 
@@ -256,6 +262,9 @@ class TideWidget(QWidget):
 
 		# demeaned_ad = ad - np.nanmean(ad)
 		time_num = date2num(at.to_pydatetime())
+
+		# time_predic = pd.date_range(start=, end=, freq=)
+		# time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = t_tide(ad, dt=1, stime=time_num[0], lat=-2.670602, synth=0)
 		predic = coef(time_num) + np.nanmean(ad)

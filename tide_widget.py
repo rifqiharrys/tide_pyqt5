@@ -68,6 +68,7 @@ class TideWidget(QWidget):
 		self.ttideButton.toggled.connect(self.methodButton)
 		self.utideButton = QRadioButton('U Tide')
 		self.utideButton.toggled.connect(self.methodButton)
+		self.utideButton.setChecked(True)
 
 		latLabel = QLabel('Latitude (dd.ddddd):')
 		self.latDSB = QDoubleSpinBox()

@@ -202,9 +202,9 @@ class TideWidget(QWidget):
 		at = input_dict['time']
 
 		plt.figure(figsize=(10, 5))
-		plt.plot(at, ad, label='Data Pasang Surut Sampel')
-		plt.xlabel('Waktu')
-		plt.ylabel('Ketinggian Muka Air dari Sensor')
+		plt.plot(at, ad, label='Tide Observation Data')
+		plt.xlabel('Time')
+		plt.ylabel('Water Level')
 		plt.legend(loc='best')
 		plt.show()
 

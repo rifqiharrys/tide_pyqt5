@@ -189,7 +189,11 @@ class TideWidget(QWidget):
 		# start_string = start.toString(Qt.ISODate)
 
 		lat = self.latDSB.value()
-
+		if lat == 0.0:
+			lat = None
+		else:
+			lat = self.latDSB.value()
+		print(lat)
 		input_dict = {'depth':depth_array, 'time':time_array, 'start':startcal_string, 'end':endcal_string, 'latitude':lat}
 
 		return input_dict

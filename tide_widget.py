@@ -76,6 +76,7 @@ class TideWidget(QWidget):
 
 		self.saveLocForm = QLineEdit()
 		saveLocButton = QPushButton('Save File Location')
+		saveLocButton.clicked.connect(self.savePathDialog)
 
 		startcalLabel = QLabel('Start Date')
 		startcalLabel.setAlignment(Qt.AlignHCenter)
@@ -117,8 +118,8 @@ class TideWidget(QWidget):
 		grid.addWidget(self.utideButton, 9, 3, 1, 2)
 		grid.addWidget(latLabel, 10, 1, 1, 1)
 		grid.addWidget(self.latDSB, 10, 2, 1, 1)
-		grid.addWidget(self.saveLocForm, 10, 3, 1, 1)
-		grid.addWidget(saveLocButton, 10, 4, 1, 1)
+		grid.addWidget(saveLocButton, 10, 3, 1, 1)
+		grid.addWidget(self.saveLocForm, 10, 4, 1, 1)
 		grid.addWidget(startcalLabel, 11, 1, 1, 2)
 		grid.addWidget(endcalLabel, 11, 3, 1, 2)
 		grid.addWidget(self.startcal, 12, 1, 1, 2)
@@ -130,54 +131,6 @@ class TideWidget(QWidget):
 		vbox.addStretch(1)
 		grid.addLayout(vbox, 20, 1)
 		self.setLayout(grid)
-
-		# form = QFormLayout()
-		# vbox = QVBoxLayout()
-		# hbox1 = QHBoxLayout()
-		# hbox2 = QHBoxLayout()
-		# hbox3 = QHBoxLayout()
-		# hbox4 = QHBoxLayout()
-		# hbox5 = QHBoxLayout()
-
-		# hbox1.addWidget(fileLocButton)
-		# hbox1.addWidget(plotObsButton)
-		# vbox.addLayout(hbox1)
-
-		# form.addRow(locLabel, self.locLineForm)
-		# form.addRow(timeHeaderLabel, self.timeHeaderLineForm)
-		# form.addRow(depthHeaderLabel, self.depthHeaderLineForm)
-		# # form.addRow(dayFirstLabel, self.dayFirstCB)
-		# # form.addRow(sepLabel, self.sepCB)
-		# vbox.addLayout(form)
-		# hbox5.addWidget(dayFirstLabel)
-		# hbox5.addWidget(self.dayFirstCB)
-		# hbox5.addWidget(sepLabel)
-		# hbox5.addWidget(self.sepCB)
-		# vbox.addLayout(hbox5)
-
-		# vbox.addWidget(self.dataFrame)
-
-		# vbox.addWidget(tideAnalysisLabel)
-		# hbox2.addWidget(self.ttideButton)
-		# hbox2.addWidget(self.utideButton)
-		# vbox.addLayout(hbox2)
-
-		# # startcal.setGridVisible(True)
-		# hbox3.addWidget(startcalLabel)
-		# hbox3.addWidget(endcalLabel)
-		# vbox.addLayout(hbox3)
-
-		# hbox4.addWidget(self.startcal)
-		# hbox4.addWidget(self.endcal)
-		# vbox.addLayout(hbox4)
-
-
-		# vbox.addWidget(vploadButton)
-		# vbox.addWidget(plotButton)
-		# vbox.addStretch(1)
-		# vbox.addWidget(aboutButton)
-		# # self.setLayout(form)
-		# self.setLayout(vbox)
 
 
 	def inputPathDialog(self):
@@ -201,8 +154,18 @@ class TideWidget(QWidget):
 		# return raw
 
 
+	def savePathDialog(self):
+
+		home_dir = str(Path.home())
+		fname = QFileDialog.getSaveFileName(self, 'Save File', home_dir, "Text files (*.txt)")
+		filePath = (str(Path(fname[0])))
+		self.saveLocForm.setText(filePath)
+
+
 	def str2bool(self, v):
+		
 		return v in ('True')
+
 
 	def inputDict(self):
 
@@ -227,6 +190,7 @@ class TideWidget(QWidget):
 
 		return input_dict
 
+
 	def plotLoad(self):
 
 		input_dict = self.inputDict()
@@ -240,7 +204,8 @@ class TideWidget(QWidget):
 		plt.ylabel('Ketinggian Muka Air dari Sensor')
 		plt.legend(loc='best')
 		plt.show()
-	
+
+
 	def methodButton(self):
 
 		method_button = self.sender()
@@ -248,11 +213,11 @@ class TideWidget(QWidget):
 			self.methodLabel.setText(method_button.text())
 
 
-
 	def analyseButton(self):
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		method_dict[method]()
+
 
 	def ttide(self):
 
@@ -272,6 +237,7 @@ class TideWidget(QWidget):
 		output_dict = {'coefficient':coef, 'prediction':predic}
 
 		return output_dict
+
 
 	def utide(self):
 

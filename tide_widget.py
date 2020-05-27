@@ -87,8 +87,9 @@ class TideWidget(QWidget):
 		self.endcal = QCalendarWidget()
 
 		solveButton = QPushButton('Analyse Tide')
-		solveButton.clicked.connect(self.analyseButton)
+		solveButton.clicked.connect(self.analyse)
 		predicButton = QPushButton('Predict Tide')
+		predicButton.clicked.connect(self.predict)
 
 
 		# plotButton.clicked.connect(self.plotLoad(dfRaw))
@@ -215,7 +216,13 @@ class TideWidget(QWidget):
 			self.methodLabel.setText(method_button.text())
 
 
-	def analyseButton(self):
+	def analyse(self):
+		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
+		method = self.methodLabel.text()
+		method_dict[method]()
+
+
+	def predict(self):
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		method_dict[method]()

@@ -186,7 +186,9 @@ class TideWidget(QWidget):
 		endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
 		# start_string = start.toString(Qt.ISODate)
 
-		input_dict = {'depth':depth_array, 'time':time_array, 'start':startcal_string, 'end':endcal_string}
+		lat = self.latDSB.value()
+
+		input_dict = {'depth':depth_array, 'time':time_array, 'start':startcal_string, 'end':endcal_string, 'latitude':lat}
 
 		return input_dict
 
@@ -224,14 +226,15 @@ class TideWidget(QWidget):
 		input_dict = self.inputDict()
 		ad = input_dict['depth']
 		at = input_dict['time']
-
+		latitude = input_dict['latitude']
+		time_diff = np.timedelta64(at[1]-at[0], 'm').astype('float64') / 60
 		# demeaned_ad = ad - np.nanmean(ad)
 		time_num = date2num(at.to_pydatetime())
 
 		# time_predic = pd.date_range(start=, end=, freq=)
 		# time_predic_num = date2num(time_predic.to_pydatetime())
 
-		coef = t_tide(ad, dt=1, stime=time_num[0], lat=-2.670602, synth=0)
+		coef = t_tide(ad, dt=time_diff, stime=time_num[0], lat=latitude, synth=0)
 		predic = coef(time_num) + np.nanmean(ad)
 
 		output_dict = {'coefficient':coef, 'prediction':predic}
@@ -247,8 +250,12 @@ class TideWidget(QWidget):
 
 		# demeaned_ad = ad - np.nanmean(ad)
 		time_num = date2num(at.to_pydatetime())
+		latitude = input_dict['latitude']
 
-		coef = solve(time_num, ad, lat=-2.670602)
+		# time_predic = pd.date_range(start=, end=, freq=)
+		# time_predic_num = date2num(time_predic.to_pydatetime())
+
+		coef = solve(time_num, ad, lat=latitude)
 		predic = reconstruct(time_num, coef)
 
 		output_dict = {'coefficient':coef, 'prediction':predic}

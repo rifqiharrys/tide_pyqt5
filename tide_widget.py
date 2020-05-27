@@ -64,13 +64,19 @@ class TideWidget(QWidget):
 		vploadButton = QPushButton('Load Valeport Data')
 		plotButton = QPushButton('Plot Loaded Data')
 
+		self.methodLabel = QLabel()
+		self.methodLabel.setAlignment(Qt.AlignRight)
 		tideAnalysisLabel = QLabel()
 		tideAnalysisLabel.setText('Tidal Analysis Method')
-		tideAnalysisLabel.setAlignment(Qt.AlignCenter)
+		tideAnalysisLabel.setAlignment(Qt.AlignLeft)
 		self.ttideButton = QRadioButton('T Tide')
-		# self.ttideButton.toggled.connect()
+		self.ttideButton.toggled.connect(self.methodButton)
 		self.utideButton = QRadioButton('U Tide')
-		# self.utideButton.toggled.connect()
+		self.utideButton.toggled.connect(self.methodButton)
+
+		solveButton = QPushButton('Analyse Tide')
+		solveButton.clicked.connect(self.analyseButton)
+		predicButton = QPushButton('Predict Tide')
 
 		startcalLabel = QLabel()
 		startcalLabel.setText('Start Date')
@@ -81,6 +87,9 @@ class TideWidget(QWidget):
 		endcalLabel.setText('End Date')
 		endcalLabel.setAlignment(Qt.AlignHCenter)
 		self.endcal = QCalendarWidget()
+
+		methodselectedlabel = QLabel()
+		
 
 		# plotButton.clicked.connect(self.plotLoad(dfRaw))
 
@@ -103,13 +112,17 @@ class TideWidget(QWidget):
 		grid.addWidget(sepLabel, 3, 3, 1, 1)
 		grid.addWidget(self.sepCB, 3, 4, 1, 1)
 		grid.addWidget(self.dataFrame, 4, 1, 4, 4)
-		grid.addWidget(tideAnalysisLabel, 8, 1, 1, 4)
+		grid.addWidget(self.methodLabel, 8, 1, 1, 2)
+		grid.addWidget(tideAnalysisLabel, 8, 3, 1, 2)
 		grid.addWidget(self.ttideButton, 9, 1, 1, 2)
 		grid.addWidget(self.utideButton, 9, 3, 1, 2)
 		grid.addWidget(startcalLabel, 10, 1, 1, 2)
 		grid.addWidget(endcalLabel, 10, 3, 1, 2)
 		grid.addWidget(self.startcal, 11, 1, 1, 2)
 		grid.addWidget(self.endcal, 11, 3, 1, 2)
+		grid.addWidget(solveButton, 12, 1, 1, 2)
+		grid.addWidget(predicButton, 12, 3, 1, 2)
+		grid.addWidget(methodselectedlabel, 13, 1, 1, 4)
 
 
 		vbox.addStretch(1)
@@ -221,6 +234,52 @@ class TideWidget(QWidget):
 		plt.ylabel('Ketinggian Muka Air dari Sensor (m)')
 		plt.legend(loc='best')
 		plt.show()
+	
+	def methodButton(self):
+
+		method_button = self.sender()
+		if method_button.isChecked():
+			self.methodLabel.setText(method_button.text())
+
+
+
+	def analyseButton(self):
+		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
+		method = self.methodLabel.text()
+		method_dict[method]()
+
+	def ttide(self):
+
+		input_dict = self.inputDict()
+		ad = input_dict['depth']
+		at = input_dict['time']
+
+		# demeaned_ad = ad - np.nanmean(ad)
+		time_num = date2num(at.to_pydatetime())
+
+		coef = t_tide(ad, dt=1, stime=time_num[0], lat=-2.670602, synth=0)
+		predic = coef(time_num) + np.nanmean(ad)
+
+		output_dict = {'coefficient':coef, 'prediction':predic}
+
+		return output_dict
+
+	def utide(self):
+
+		input_dict = self.inputDict()
+		ad = input_dict['depth']
+		at = input_dict['time']
+
+		# demeaned_ad = ad - np.nanmean(ad)
+		time_num = date2num(at.to_pydatetime())
+
+		coef = solve(time_num, ad, lat=-2.670602)
+		predic = reconstruct(time_num, coef)
+
+		output_dict = {'coefficient':coef, 'prediction':predic}
+
+		return output_dict
+
 	
 	# def methodSelect(self, button):
 	# 	if button.text == 'T Tide':

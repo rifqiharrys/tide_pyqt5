@@ -186,7 +186,7 @@ class TideWidget(QWidget):
 
 		startcal_string = self.startcal.selectedDate().toString(Qt.ISODate)
 		endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
-		# start_string = start.toString(Qt.ISODate)
+		# time_predic = pd.date_range(start=startcal_string, end=endcal_string, freq=)
 
 		lat = self.latDSB.value()
 		if lat == 0.0:

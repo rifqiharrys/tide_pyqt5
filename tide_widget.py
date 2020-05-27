@@ -5,7 +5,7 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
-                             QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox)
+							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox)
 from PyQt5.QtGui import QIcon
 from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd

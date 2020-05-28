@@ -261,7 +261,6 @@ class TideWidget(QWidget):
 			init_print = pd.DataFrame((coef_dict.diagn), index=coef_dict.diagn['name'])
 
 
-
 	def predict(self):
 
 		input_dict = self.inputDict()

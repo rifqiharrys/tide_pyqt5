@@ -242,9 +242,12 @@ class TideWidget(QWidget):
 	def analyse(self):
 
 		input_dict = self.inputDict()
+		save_file = input_dict['save']
+
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
-		method_dict[method]()
+		result = method_dict[method]()
+		coefficient_dict = result['coefficient']
 
 
 	def predict(self):

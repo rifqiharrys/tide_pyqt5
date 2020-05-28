@@ -37,7 +37,6 @@ class TideWidget(QWidget):
 		fileLocButton.clicked.connect(self.inputPathDialog)
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
-		locLabel = QLabel('Insert file location:')
 		self.locLineForm = QLineEdit()
 
 		timeHeaderLabel = QLabel('Time Header:')

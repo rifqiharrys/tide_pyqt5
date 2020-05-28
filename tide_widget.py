@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFi
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox)
 from PyQt5.QtGui import QIcon
-from tdr_py.vp_tide import v_merge, v_dirmerge
+# from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
 import numpy as np
 from ttide import t_tide, t_utils

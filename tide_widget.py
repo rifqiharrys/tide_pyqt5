@@ -149,11 +149,6 @@ class TideWidget(QWidget):
 				data = f.read()
 				self.dataFrame.setText(data)
 
-		# raw = pd.read_csv(data, sep='\t', index_col='Time')
-		# raw.index = pd.to_datetime(raw.index, dayfirst=True)
-
-		# return raw
-
 
 	def savePathDialog(self):
 

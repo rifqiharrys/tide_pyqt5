@@ -254,6 +254,9 @@ class TideWidget(QWidget):
 		elif method == 'U Tide':
 			init_print = pd.DataFrame((coef_dict.diagn), index=coef_dict.diagn['name'])
 
+		report = open(save_file, 'w')
+		report.write(print_coef)
+
 
 	def predict(self):
 

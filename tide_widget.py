@@ -266,13 +266,19 @@ class TideWidget(QWidget):
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		result = method_dict[method]()
+
+		time = input_dict['predicted time']
 		prediction_dict = result['prediction']
 		
 		if method == 'T Tide':
 			water_level = prediction_dict
 		elif method == 'U Tide':
 			water_level = prediction_dict['h']
-		
+
+		predic_out = pd.DataFrame({'Depth':water_level,'Time':time})
+		predic_out.index = predic_out['Time']
+		predic_out = predic_out.iloc[:, 0:1]
+
 		# vsort.to_csv('SORT.TXT', sep='\t')
 
 		self.plotPredic(water_level)

@@ -247,12 +247,12 @@ class TideWidget(QWidget):
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		result = method_dict[method]()
-		coefficient_dict = result['coefficient']
+		coef_dict = result['coefficient']
 
 		if method == 'T Tide':
-			print_coef = t_utils.pandas_style(coefficient_dict)
+			print_coef = t_utils.pandas_style(coef_dict)
 		elif method == 'U Tide':
-			init_print = pd.DataFrame((coefficient_dict.diagn), index=coefficient_dict.diagn['name'])
+			init_print = pd.DataFrame((coef_dict.diagn), index=coef_dict.diagn['name'])
 
 
 	def predict(self):

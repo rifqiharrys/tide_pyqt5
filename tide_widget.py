@@ -195,7 +195,9 @@ class TideWidget(QWidget):
 
 		time_predic = pd.date_range(start=startcal_string, end=endcal_string, freq=frequency)
 
-		input_dict = {'depth':depth_array, 'time':time_array, 'latitude':lat, 'predicted time':time_predic}
+		save_file = self.saveLocLineForm.text()
+
+		input_dict = {'depth':depth_array, 'time':time_array, 'latitude':lat, 'predicted time':time_predic, 'save':save_file}
 
 		return input_dict
 
@@ -215,6 +217,21 @@ class TideWidget(QWidget):
 		plt.show()
 
 
+	def plotPredic(self, water_level):
+
+		input_dict = self.inputDict()
+
+		ad = water_level
+		at = input_dict['predicted time']
+
+		plt.figure(figsize=(10, 5))
+		plt.plot(at, ad, label='Tide Prediction Data')
+		plt.xlabel('Time')
+		plt.ylabel('Water Level')
+		plt.legend(loc='best')
+		plt.show()
+
+
 	def methodButton(self):
 
 		method_button = self.sender()
@@ -224,6 +241,7 @@ class TideWidget(QWidget):
 
 	def analyse(self):
 
+		input_dict = self.inputDict()
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		method_dict[method]()
@@ -231,12 +249,23 @@ class TideWidget(QWidget):
 
 	def predict(self):
 
+		input_dict = self.inputDict()
+		save_file = input_dict['save']
+
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		result = method_dict[method]()
 		prediction_dict = result['prediction']
-		water_level = prediction_dict['h']
-		print(water_level)
+		
+		if method == 'T Tide':
+			water_level = prediction_dict
+		elif method == 'U Tide':
+			water_level = prediction_dict['h']
+		
+		# vsort.to_csv('SORT.TXT', sep='\t')
+
+		self.plotPredic(water_level)
+
 
 	def ttide(self):
 

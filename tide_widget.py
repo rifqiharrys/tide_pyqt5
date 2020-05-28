@@ -54,8 +54,6 @@ class TideWidget(QWidget):
 		self.sepCB.addItems(['Tab', 'Space', 'Semicolon'])
 
 		self.dataFrame = QTextBrowser()
-		vploadButton = QPushButton('Load Valeport Data')
-		plotButton = QPushButton('Plot Loaded Data')
 
 		self.methodLabel = QLabel()
 		self.methodLabel.setAlignment(Qt.AlignRight)
@@ -96,10 +94,8 @@ class TideWidget(QWidget):
 		predicButton.clicked.connect(self.predict)
 
 
-		# plotButton.clicked.connect(self.plotLoad(dfRaw))
-
-
-
+		vploadButton = QPushButton('Load Valeport Data')
+		plotButton = QPushButton('Plot Loaded Data')
 		aboutButton = QPushButton('About')
 
 		grid = QGridLayout()
@@ -147,7 +143,6 @@ class TideWidget(QWidget):
 		fname = QFileDialog.getOpenFileName(self, 'Load file', home_dir)
 		filePath = str(Path(fname[0]))
 		self.locLineForm.setText(filePath)
-		# raw = self.convertLoad(filePath)
 
 		if fname[0]:
 			f = open(fname[0], 'r')
@@ -250,7 +245,6 @@ class TideWidget(QWidget):
 		at = input_dict['time']
 		latitude = input_dict['latitude']
 		time_diff = np.timedelta64(at[1]-at[0], 'm').astype('float64') / 60
-		# demeaned_ad = ad - np.nanmean(ad)
 		time_num = date2num(at.to_pydatetime())
 
 		time_predic = input_dict['predicted time']
@@ -270,13 +264,11 @@ class TideWidget(QWidget):
 		ad = input_dict['depth']
 		at = input_dict['time']
 
-		# demeaned_ad = ad - np.nanmean(ad)
 		time_num = date2num(at.to_pydatetime())
 		latitude = input_dict['latitude']
 
 		time_predic = input_dict['predicted time']
 		time_predic_num = date2num(time_predic.to_pydatetime())
-
 
 		coef = solve(time_num, ad, lat=latitude)
 		predic = reconstruct(time_predic_num, coef)
@@ -284,15 +276,6 @@ class TideWidget(QWidget):
 		output_dict = {'coefficient':coef, 'prediction':predic}
 
 		return output_dict
-
-	
-	# def methodSelect(self, button):
-	# 	if button.text == 'T Tide':
-
-
-	# def dayFirst(self, i):
-
-	# 	for count in range (self.dayFirstCB.count()):
 
 
 

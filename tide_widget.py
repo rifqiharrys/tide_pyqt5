@@ -249,13 +249,17 @@ class TideWidget(QWidget):
 		result = method_dict[method]()
 		coef_dict = result['coefficient']
 
+		method.replace(' ', '-')
+		text_edit = '_' + method + '_report.txt'
+		save_file.replace('.txt', text_edit)
+
 		if method == 'T Tide':
 			print_coef = t_utils.pandas_style(coef_dict)
+			report = open(save_file, 'w')
+			report.write(print_coef)
 		elif method == 'U Tide':
 			init_print = pd.DataFrame((coef_dict.diagn), index=coef_dict.diagn['name'])
 
-		report = open(save_file, 'w')
-		report.write(print_coef)
 
 
 	def predict(self):
@@ -275,11 +279,15 @@ class TideWidget(QWidget):
 		elif method == 'U Tide':
 			water_level = prediction_dict['h']
 
+		method.replace(' ', '-')
+		text_edit = '_' + method + '.txt'
+		save_file.replace('.txt', text_edit)
+
 		predic_out = pd.DataFrame({'Depth':water_level,'Time':time})
 		predic_out.index = predic_out['Time']
 		predic_out = predic_out.iloc[:, 0:1]
 
-		# vsort.to_csv('SORT.TXT', sep='\t')
+		predic_out.to_csv(save_file, sep='\t')
 
 		self.plotPredic(water_level)
 

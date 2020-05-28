@@ -5,7 +5,7 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
-							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox)
+							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -48,7 +48,6 @@ class TideWidget(QWidget):
 		dayFirstLabel = QLabel('Day First:')
 		self.dayFirstCB = QComboBox()
 		self.dayFirstCB.addItems(['True', 'False'])
-		# self.dayFirstCB.currentIndexChanged.connect(self.selectionchange)
 
 		sepLabel = QLabel('Separator:')
 		self.sepCB = QComboBox()
@@ -74,7 +73,7 @@ class TideWidget(QWidget):
 		self.latDSB.setRange(-90.0, 90.0)
 		self.latDSB.setDecimals(5)
 
-		self.saveLocForm = QLineEdit()
+		self.saveLocLineForm = QLineEdit()
 		saveLocButton = QPushButton('Save File Location')
 		saveLocButton.clicked.connect(self.savePathDialog)
 
@@ -85,6 +84,11 @@ class TideWidget(QWidget):
 		endcalLabel = QLabel('End Date')
 		endcalLabel.setAlignment(Qt.AlignHCenter)
 		self.endcal = QCalendarWidget()
+
+		freqLabel = QLabel('Time Interval:')
+		self.freqSB = QSpinBox()
+		self.freqUnitCB = QComboBox()
+		self.freqUnitCB.addItems(['hours', 'minutes'])
 
 		solveButton = QPushButton('Analyse Tide')
 		solveButton.clicked.connect(self.analyse)
@@ -120,13 +124,16 @@ class TideWidget(QWidget):
 		grid.addWidget(latLabel, 10, 1, 1, 1)
 		grid.addWidget(self.latDSB, 10, 2, 1, 1)
 		grid.addWidget(saveLocButton, 10, 3, 1, 1)
-		grid.addWidget(self.saveLocForm, 10, 4, 1, 1)
+		grid.addWidget(self.saveLocLineForm, 10, 4, 1, 1)
 		grid.addWidget(startcalLabel, 11, 1, 1, 2)
 		grid.addWidget(endcalLabel, 11, 3, 1, 2)
 		grid.addWidget(self.startcal, 12, 1, 1, 2)
 		grid.addWidget(self.endcal, 12, 3, 1, 2)
-		grid.addWidget(solveButton, 13, 1, 1, 2)
-		grid.addWidget(predicButton, 13, 3, 1, 2)
+		grid.addWidget(freqLabel, 13, 1, 1, 1)
+		grid.addWidget(self.freqSB, 13, 2, 1, 2)
+		grid.addWidget(self.freqUnitCB, 13, 4, 1, 1)
+		grid.addWidget(solveButton, 14, 1, 1, 2)
+		grid.addWidget(predicButton, 14, 3, 1, 2)
 
 
 		vbox.addStretch(1)
@@ -155,7 +162,7 @@ class TideWidget(QWidget):
 		home_dir = str(Path.home())
 		fname = QFileDialog.getSaveFileName(self, 'Save File', home_dir, "Text files (*.txt)")
 		filePath = (str(Path(fname[0])))
-		self.saveLocForm.setText(filePath)
+		self.saveLocLineForm.setText(filePath)
 
 
 	def str2bool(self, v):
@@ -178,17 +185,22 @@ class TideWidget(QWidget):
 		depth_array = raw[depth].values
 		time_array = raw.index
 
-		startcal_string = self.startcal.selectedDate().toString(Qt.ISODate)
-		endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
-		# time_predic = pd.date_range(start=startcal_string, end=endcal_string, freq=)
-
 		lat = self.latDSB.value()
 		if lat == 0.0:
 			lat = None
 		else:
 			lat = self.latDSB.value()
-		print(lat)
-		input_dict = {'depth':depth_array, 'time':time_array, 'start':startcal_string, 'end':endcal_string, 'latitude':lat}
+
+		startcal_string = self.startcal.selectedDate().toString(Qt.ISODate)
+		endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
+
+		freq_unit_dict = {'hours':'H', 'minutes':'min'}
+		freq_unit_value = freq_unit_dict[self.freqUnitCB.currentText()]
+		frequency = str(self.freqSB.value()) + freq_unit_value
+
+		time_predic = pd.date_range(start=startcal_string, end=endcal_string, freq=frequency)
+
+		input_dict = {'depth':depth_array, 'time':time_array, 'latitude':lat, 'predicted time':time_predic}
 
 		return input_dict
 
@@ -216,16 +228,20 @@ class TideWidget(QWidget):
 
 
 	def analyse(self):
+
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
 		method_dict[method]()
 
 
 	def predict(self):
+
 		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
 		method = self.methodLabel.text()
-		method_dict[method]()
-
+		result = method_dict[method]()
+		prediction_dict = result['prediction']
+		water_level = prediction_dict['h']
+		print(water_level)
 
 	def ttide(self):
 
@@ -237,11 +253,11 @@ class TideWidget(QWidget):
 		# demeaned_ad = ad - np.nanmean(ad)
 		time_num = date2num(at.to_pydatetime())
 
-		# time_predic = pd.date_range(start=, end=, freq=)
-		# time_predic_num = date2num(time_predic.to_pydatetime())
+		time_predic = input_dict['predicted time']
+		time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = t_tide(ad, dt=time_diff, stime=time_num[0], lat=latitude, synth=0)
-		predic = coef(time_num) + np.nanmean(ad)
+		predic = coef(time_predic_num) + np.nanmean(ad)
 
 		output_dict = {'coefficient':coef, 'prediction':predic}
 
@@ -258,11 +274,12 @@ class TideWidget(QWidget):
 		time_num = date2num(at.to_pydatetime())
 		latitude = input_dict['latitude']
 
-		# time_predic = pd.date_range(start=, end=, freq=)
-		# time_predic_num = date2num(time_predic.to_pydatetime())
+		time_predic = input_dict['predicted time']
+		time_predic_num = date2num(time_predic.to_pydatetime())
+
 
 		coef = solve(time_num, ad, lat=latitude)
-		predic = reconstruct(time_num, coef)
+		predic = reconstruct(time_predic_num, coef)
 
 		output_dict = {'coefficient':coef, 'prediction':predic}
 

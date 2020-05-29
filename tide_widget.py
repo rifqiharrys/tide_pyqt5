@@ -94,8 +94,8 @@ class TideWidget(QWidget):
 		predicButton.clicked.connect(self.predict)
 
 
-		vploadButton = QPushButton('Load Valeport Data')
-		plotButton = QPushButton('Plot Loaded Data')
+		# vploadButton = QPushButton('Load Valeport Data')
+		howToUseButton = QPushButton('How To Use')
 		aboutButton = QPushButton('About')
 
 		grid = QGridLayout()
@@ -134,6 +134,8 @@ class TideWidget(QWidget):
 
 		vbox.addStretch(1)
 		grid.addLayout(vbox, 20, 1)
+		grid.addWidget(howToUseButton, 21, 1, 1, 2)
+		grid.addWidget(aboutButton, 21, 3, 1, 2)
 		self.setLayout(grid)
 
 

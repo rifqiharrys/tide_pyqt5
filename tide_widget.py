@@ -223,9 +223,10 @@ class TideWidget(QWidget):
 
 		ad = water_level
 		at = input_dict['predicted time']
+		data_label = 'Predicted Data using ' + self.methodLabel.text()
 
 		plt.figure(figsize=(10, 5))
-		plt.plot(at, ad, label='Tide Prediction Data')
+		plt.plot(at, ad, label=data_label)
 		plt.xlabel('Time')
 		plt.ylabel('Water Level')
 		plt.legend(loc='best')

@@ -5,7 +5,8 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
-							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox)
+							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
+							 QDialog)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -333,6 +334,22 @@ class TideWidget(QWidget):
 
 		return output_dict
 
+
+	def aboutDialog(self):
+
+		about = QDialog()
+		about.setWindowTitle('About')
+
+		aboutText = '''
+		This is a tidal analysis GUI using T Tide and U Tide (both Python version).\n\n
+		The GUI itself developed by Rifqi Muhammad Harrys using PyQt5, a python GUI library.\n
+		Both T Tide and U Tide developed by two different entities. 
+		The original version of T Tide and U Tide are in MATLAB language brought by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide). 
+		
+		'''
+		aboutLabel = QLabel()
+
+		about.exec_()
 
 
 # class TideAnalysis():

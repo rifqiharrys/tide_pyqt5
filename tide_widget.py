@@ -379,9 +379,9 @@ class TideWidget(QWidget):
 		<br><\br>
 		The original versions of <a href=\'https://www.eoas.ubc.ca/~rich/#T_Tide'>T Tide</a> and 
 		<a href=\'https://www.mathworks.com/matlabcentral/fileexchange/46523-utide-unified-tidal-analysis-and-prediction-functions?w.mathworks.com'>U Tide</a> 
-		are in MATLAB language created by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide).<br><\br><br><\br>
+		are in MATLAB language developed by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide).<br><\br><br><\br>
 		The python version of <a href=\'https://github.com/moflaher/ttide_py'>T Tide</a> and 
-		<a href=\'https://github.com/wesleybowman/UTide'>U Tide</a> were created by moflaher (T Tide) and Wesley Bowman (U Tide).
+		<a href=\'https://github.com/wesleybowman/UTide'>U Tide</a> were developed by moflaher (T Tide) and Wesley Bowman (U Tide).
 		<br><\br><br><\br>
 		A description of the theoretical basis of the analysis and some implementation details 
 		of T Tide and U Tide Matlab version can be found in:

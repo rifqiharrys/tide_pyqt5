@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-							 QMessageBox, QDialog)
+							 QMessageBox, QDialog, qApp)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -342,34 +342,22 @@ class TideWidget(QWidget):
 		# howTo = QMessageBox()
 		howTo = QDialog()
 		howTo.setWindowTitle('How to Use')
-		# howTo.setGeometry(300, 200, 480, 480)
+		closeButton = QPushButton("Close")
+		closeButton.clicked.connect(howTo.close)
 
 		# howTo.setText('The details of how to use this tide analysis GUI is as follows:')
 
-		howToText = '''
-1. Prepare your tide observation data containing at least two types of dataset which is water level and timestamp. 
-Your data must contain headers on every dataset column.\n
-2. Push "Open File Location" button to locate your data, or insert your data path manually into a text box right beside the push button.\n
-3. Type in timestamp and depth header name of your data into the text boxes with the corresponding name right beside it.\n
-4. If you wish to plot the observation data, push "Plot Observation Data" which located on the right side of file location text box. 
-Note that you have to insert timestamp and depth header first in order to plot your observation data.\n
-5. Select one of the tidal analysis method (T Tide or U Tide).\n
-6. Type in the latitude of your tide station in which your observation data was taken.\n
-7. 
-		'''
-		howToLabel = QLabel('The details of how to use this tide analysis GUI is as follows:')
 		how_to_use = open('how_to_use.txt', 'r')
+		howToLabel = QLabel('The details of how to use this tide analysis GUI is as follows:')
 		howToTextBrowser = QTextBrowser()
 		howToTextBrowser.setText(how_to_use.read())
 
-
-		# howTo.setInformativeText(howToText)
+		# howTo.setInformativeText(how_to_use.read())
 		grid = QGridLayout()
 		vbox = QVBoxLayout()
 		grid.addWidget(howToLabel, 1, 1, 1, 4)
 		grid.addWidget(howToTextBrowser, 2, 1, 50, 4)
-		# vbox.addStretch(1)
-		# grid.addLayout(vbox, 100, 1)
+		grid.addWidget(closeButton, 52, 4, 1, 1)
 		howTo.setLayout(grid)
 
 		howTo.exec_()

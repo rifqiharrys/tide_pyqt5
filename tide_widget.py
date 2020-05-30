@@ -52,7 +52,7 @@ class TideWidget(QWidget):
 
 		sepLabel = QLabel('Separator:')
 		self.sepCB = QComboBox()
-		self.sepCB.addItems(['Tab', 'Space', 'Semicolon'])
+		self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
 
 		self.dataFrame = QTextBrowser()
 
@@ -176,7 +176,7 @@ class TideWidget(QWidget):
 		time = self.timeHeaderLineForm.text()
 		depth = self.depthHeaderLineForm.text()
 		dayF = self.str2bool(self.dayFirstCB.currentText())
-		sepDict = {'Tab':'\t', 'Space':' ', 'Semicolon':';'}
+		sepDict = {'Tab':'\t', 'Comma':',', 'Space':' ', 'Semicolon':';'}
 		sepSelect = sepDict[self.sepCB.currentText()]
 
 		raw = pd.read_csv(location, sep=sepSelect, index_col=time)
@@ -367,9 +367,9 @@ Note that you have to insert timestamp and depth header first in order to plot y
 		grid = QGridLayout()
 		vbox = QVBoxLayout()
 		grid.addWidget(howToLabel, 1, 1, 1, 4)
-		grid.addWidget(howToTextBrowser, 2, 1, 19, 4)
+		grid.addWidget(howToTextBrowser, 2, 1, 50, 4)
 		vbox.addStretch(1)
-		grid.addLayout(vbox, 20, 1)
+		grid.addLayout(vbox, 100, 1)
 		howTo.setLayout(grid)
 
 		howTo.exec_()

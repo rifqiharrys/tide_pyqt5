@@ -368,8 +368,8 @@ Note that you have to insert timestamp and depth header first in order to plot y
 		vbox = QVBoxLayout()
 		grid.addWidget(howToLabel, 1, 1, 1, 4)
 		grid.addWidget(howToTextBrowser, 2, 1, 50, 4)
-		vbox.addStretch(1)
-		grid.addLayout(vbox, 100, 1)
+		# vbox.addStretch(1)
+		# grid.addLayout(vbox, 100, 1)
 		howTo.setLayout(grid)
 
 		howTo.exec_()

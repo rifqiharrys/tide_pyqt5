@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-							 QDialog)
+							 QMessageBox, QDialog)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -23,7 +23,7 @@ register_matplotlib_converters()
 class TideWidget(QWidget):
 
 	def __init__(self):
-		super().__init__()
+		super(TideWidget, self).__init__()
 
 		self.initUI()
 
@@ -96,8 +96,10 @@ class TideWidget(QWidget):
 
 
 		# vploadButton = QPushButton('Load Valeport Data')
-		howToUseButton = QPushButton('How To Use')
+		howToButton = QPushButton('How To Use')
+		howToButton.clicked.connect(self.howToDialog)
 		aboutButton = QPushButton('About')
+		aboutButton.clicked.connect(self.aboutDialog)
 
 		grid = QGridLayout()
 		vbox = QVBoxLayout()
@@ -135,7 +137,7 @@ class TideWidget(QWidget):
 
 		vbox.addStretch(1)
 		grid.addLayout(vbox, 20, 1)
-		grid.addWidget(howToUseButton, 21, 1, 1, 2)
+		grid.addWidget(howToButton, 21, 1, 1, 2)
 		grid.addWidget(aboutButton, 21, 3, 1, 2)
 		self.setLayout(grid)
 
@@ -335,28 +337,102 @@ class TideWidget(QWidget):
 		return output_dict
 
 
+	def howToDialog(self):
+
+		# howTo = QMessageBox()
+		howTo = QDialog()
+		howTo.setWindowTitle('How to Use')
+		# howTo.setGeometry(300, 200, 480, 480)
+
+		# howTo.setText('The details of how to use this tide analysis GUI is as follows:')
+
+		howToText = '''
+1. Prepare your tide observation data containing at least two types of dataset which is water level and timestamp. 
+Your data must contain headers on every dataset column.\n
+2. Push "Open File Location" button to locate your data, or insert your data path manually into a text box right beside the push button.\n
+3. Type in timestamp and depth header name of your data into the text boxes with the corresponding name right beside it.\n
+4. If you wish to plot the observation data, push "Plot Observation Data" which located on the right side of file location text box. 
+Note that you have to insert timestamp and depth header first in order to plot your observation data.\n
+5. Select one of the tidal analysis method (T Tide or U Tide).\n
+6. Type in the latitude of your tide station in which your observation data was taken.\n
+7. 
+		'''
+		howToLabel = QLabel('The details of how to use this tide analysis GUI is as follows:')
+		how_to_use = open('how_to_use.txt', 'r')
+		howToTextBrowser = QTextBrowser()
+		howToTextBrowser.setText(how_to_use.read())
+
+
+		# howTo.setInformativeText(howToText)
+		grid = QGridLayout()
+		vbox = QVBoxLayout()
+		grid.addWidget(howToLabel, 1, 1, 1, 4)
+		grid.addWidget(howToTextBrowser, 2, 1, 19, 4)
+		vbox.addStretch(1)
+		grid.addLayout(vbox, 20, 1)
+		howTo.setLayout(grid)
+
+		howTo.exec_()
+
+
 	def aboutDialog(self):
 
-		about = QDialog()
+		about = QMessageBox()
 		about.setWindowTitle('About')
+		about.setText('This is a tidal analysis GUI using T Tide and U Tide (both Python version)')
 
 		aboutText = '''
-		This is a tidal analysis GUI using T Tide and U Tide (both Python version).\n\n
-		The GUI itself developed by Rifqi Muhammad Harrys using PyQt5, a python GUI library.\n
-		Both T Tide and U Tide developed by two different entities. 
-		The original version of T Tide and U Tide are in MATLAB language brought by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide). 
+The GUI itself developed by Rifqi Muhammad Harrys using PyQt5, a python GUI library.\n
+Both T Tide and U Tide developed by two different entities. 
+The original version of T Tide and U Tide are in MATLAB language brought by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide). 
 		
 		'''
-		aboutLabel = QLabel()
+		about.setInformativeText(aboutText)
 
 		about.exec_()
 
 
-# class TideAnalysis():
+	def infoDialog(self):
+		info = InfoDialog()
+		info.exec_()
 
+
+# class InfoDialog(QDialog):
 
 # 	def _init_(self):
 
+# 		super(InfoDialog, self)._init_()
+
+# 		self.initUI()
+
+# 	def initUI(self):
+# 		self.setGeometry(400, 200, 480, 640)
+# 		# a = TideWidget.aboutButton
+# 		# h = TideWidget.howToButton
+
+# 		self.setWindowTitle('About')
+# 		# if a.isChecked():
+# 		# 	self.setWindowTitle('About')
+# 		# elif h.isChecked():
+# 		# 	self.setWindowTitle('How To Use')
+
+# 		howToText = '''
+# 1. Prepare your tide observation data containing at least two types of dataset which is water level and timestamp. Your data must contain headers on every dataset column.\n
+# 2. Push "Open File Location" button to locate your data, or insert your data path manually into a text box right beside the push button.\n
+# 3. Type in timestamp and depth header name of your data into the text boxes with the corresponding name right beside it.\n
+# 4. If you wish to plot the observation data, push "Plot Observation Data" which located on the right side of file location text box. 
+# Note that you have to insert timestamp and depth header first in order to plot your observation data.\n
+# 5. Select one of the tidal analysis method (T Tide or U Tide).\n
+# 6. Type in the latitude of your tide station in which your observation data was taken.\n
+# 7. 
+# 		'''
+
+# 		aboutText = '''
+# The GUI itself developed by Rifqi Muhammad Harrys using PyQt5, a python GUI library.\n
+# Both T Tide and U Tide developed by two different entities. 
+# The original version of T Tide and U Tide are in MATLAB language brought by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide). 
+		
+# 		'''
 
 
 

@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-                             QAbstractSpinBox, QDialog)
+							 QAbstractSpinBox, QDialog)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -260,12 +260,17 @@ class TideWidget(QWidget):
 		text_edit = '_' + method + '_report.txt'
 		save_file = save_file.replace('.txt', text_edit)
 
-		if method == 'T Tide':
+		if method == 'T-Tide':
 			print_coef = t_utils.pandas_style(coef_dict)
 			report = open(save_file, 'w')
 			report.write(print_coef)
-		elif method == 'U Tide':
-			init_print = pd.DataFrame((coef_dict.diagn), index=coef_dict.diagn['name'])
+		elif method == 'U-Tide':
+			print_coef = pd.DataFrame({'name': coef_dict.name, 'frq': coef_dict.aux.frq, 'lind': coef_dict.aux.lind, 
+			'A': coef_dict.A, 'g': coef_dict.g, 'A_ci': coef_dict.A_ci, 'g_ci': coef_dict.g_ci, 
+			'PE': coef_dict.diagn['PE'], 'SNR': coef_dict.diagn['SNR']})
+			print_coef.index = print_coef['name']
+			print_coef = print_coef.iloc[:, 1:]
+			print_coef.to_csv(save_file, sep='\t')
 
 
 	def predict(self):

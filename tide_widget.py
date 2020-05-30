@@ -377,12 +377,15 @@ The original version of T Tide and U Tide are in MATLAB language brought by R. P
 		'''
 		about.setInformativeText(aboutText)
 
+		lisence = open('LICENSE', 'r')
+		about.setDetailedText(lisence.read())
+
 		about.exec_()
 
 
-	def infoDialog(self):
-		info = InfoDialog()
-		info.exec_()
+	# def infoDialog(self):
+	# 	info = InfoDialog()
+	# 	info.exec_()
 
 
 # class InfoDialog(QDialog):

@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-							 QMessageBox, QDialog, qApp)
+                             QAbstractSpinBox, QDialog)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -70,7 +70,8 @@ class TideWidget(QWidget):
 		latLabel = QLabel('Latitude (dd.ddddd):')
 		self.latDSB = QDoubleSpinBox()
 		self.latDSB.setRange(-90.0, 90.0)
-		self.latDSB.setDecimals(5)
+		self.latDSB.setDecimals(6)
+		# self.latDSB.setStepType(QAbstractSpinBox.AdaptiveDecimalStepType)
 
 		self.saveLocLineForm = QLineEdit()
 		saveLocButton = QPushButton('Save File Location')
@@ -339,22 +340,17 @@ class TideWidget(QWidget):
 
 	def howToDialog(self):
 
-		# howTo = QMessageBox()
 		howTo = QDialog()
 		howTo.setWindowTitle('How to Use')
 		closeButton = QPushButton("Close")
 		closeButton.clicked.connect(howTo.close)
-
-		# howTo.setText('The details of how to use this tide analysis GUI is as follows:')
 
 		how_to_use = open('how_to_use.txt', 'r')
 		howToLabel = QLabel('The details of how to use this tide analysis GUI is as follows:')
 		howToTextBrowser = QTextBrowser()
 		howToTextBrowser.setText(how_to_use.read())
 
-		# howTo.setInformativeText(how_to_use.read())
 		grid = QGridLayout()
-		vbox = QVBoxLayout()
 		grid.addWidget(howToLabel, 1, 1, 1, 4)
 		grid.addWidget(howToTextBrowser, 2, 1, 50, 4)
 		grid.addWidget(closeButton, 52, 4, 1, 1)
@@ -365,65 +361,57 @@ class TideWidget(QWidget):
 
 	def aboutDialog(self):
 
-		about = QMessageBox()
+		# about = QMessageBox()
+		about = QDialog()
 		about.setWindowTitle('About')
-		about.setText('This is a tidal analysis GUI using T Tide and U Tide (both Python version)')
+		closeButton = QPushButton("Close")
+		closeButton.clicked.connect(about.close)
+		# about.setText('This is a tidal analysis GUI using T Tide and U Tide (both Python version)')
 
-		aboutText = '''
-The GUI itself developed by Rifqi Muhammad Harrys using PyQt5, a python GUI library.\n
-Both T Tide and U Tide developed by two different entities. 
-The original version of T Tide and U Tide are in MATLAB language brought by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide). 
-		
+		aboutText = '''<body>
+		This is a tidal analysis GUI using T Tide and U Tide (both Python version).
+		<br><\br><br><\br>
+		The GUI itself was developed by 
+		<a href=\'https://github.com/rifqiharrys/tide_pyqt5'>Rifqi Muhammad Harrys</a> 
+		using PyQt5, a python GUI library.
+		<br><\br><br><\br>
+		Both T Tide and U Tide developed by two different entities.
+		<br><\br>
+		The original versions of <a href=\'https://www.eoas.ubc.ca/~rich/#T_Tide'>T Tide</a> and 
+		<a href=\'https://www.mathworks.com/matlabcentral/fileexchange/46523-utide-unified-tidal-analysis-and-prediction-functions?w.mathworks.com'>U Tide</a> 
+		are in MATLAB language created by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide).<br><\br><br><\br>
+		The python version of <a href=\'https://github.com/moflaher/ttide_py'>T Tide</a> and 
+		<a href=\'https://github.com/wesleybowman/UTide'>U Tide</a> were created by moflaher (T Tide) and Wesley Bowman (U Tide).
+		<br><\br><br><\br>
+		A description of the theoretical basis of the analysis and some implementation details 
+		of T Tide and U Tide Matlab version can be found in:
+		</body>'''
+
+		tideCite = '''
+		<cite>R. Pawlowicz, B. Beardsley, and S. Lentz, 
+		"Classical tidal harmonic analysis including error estimates in MATLAB using 
+		T_TIDE", Computers and Geosciences 28 (2002), 929-937.</cite>
+		<br><\br><br><\br>
+		<cite>Codiga, Daniel. (2011). Unified tidal analysis and prediction using 
+		the UTide Matlab functions. 10.13140/RG.2.1.3761.2008. </cite>
 		'''
-		about.setInformativeText(aboutText)
 
-		lisence = open('LICENSE', 'r')
-		about.setDetailedText(lisence.read())
+		aboutLabel1 = QLabel(aboutText)
+		aboutLabel1.setWordWrap(True)
+		aboutLabel1.setOpenExternalLinks(True)
+		aboutLabel2 = QLabel(tideCite)
+		aboutLabel2.setTextInteractionFlags(Qt.TextSelectableByMouse)
+		aboutLabel2.setWordWrap(True)
+		aboutTB = QTextBrowser()
+		aboutTB.setText(tideCite)
+		grid = QGridLayout()
+		grid.addWidget(aboutLabel1, 1, 1, 1, 4)
+		grid.addWidget(aboutTB, 2, 1, 1, 4)
+		grid.addWidget(closeButton, 3, 4, 1, 1)
+
+		about.setLayout(grid)
 
 		about.exec_()
-
-
-	# def infoDialog(self):
-	# 	info = InfoDialog()
-	# 	info.exec_()
-
-
-# class InfoDialog(QDialog):
-
-# 	def _init_(self):
-
-# 		super(InfoDialog, self)._init_()
-
-# 		self.initUI()
-
-# 	def initUI(self):
-# 		self.setGeometry(400, 200, 480, 640)
-# 		# a = TideWidget.aboutButton
-# 		# h = TideWidget.howToButton
-
-# 		self.setWindowTitle('About')
-# 		# if a.isChecked():
-# 		# 	self.setWindowTitle('About')
-# 		# elif h.isChecked():
-# 		# 	self.setWindowTitle('How To Use')
-
-# 		howToText = '''
-# 1. Prepare your tide observation data containing at least two types of dataset which is water level and timestamp. Your data must contain headers on every dataset column.\n
-# 2. Push "Open File Location" button to locate your data, or insert your data path manually into a text box right beside the push button.\n
-# 3. Type in timestamp and depth header name of your data into the text boxes with the corresponding name right beside it.\n
-# 4. If you wish to plot the observation data, push "Plot Observation Data" which located on the right side of file location text box. 
-# Note that you have to insert timestamp and depth header first in order to plot your observation data.\n
-# 5. Select one of the tidal analysis method (T Tide or U Tide).\n
-# 6. Type in the latitude of your tide station in which your observation data was taken.\n
-# 7. 
-# 		'''
-
-# 		aboutText = '''
-# The GUI itself developed by Rifqi Muhammad Harrys using PyQt5, a python GUI library.\n
-# Both T Tide and U Tide developed by two different entities. 
-# The original version of T Tide and U Tide are in MATLAB language brought by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide). 
-		
-# 		'''
 
 
 

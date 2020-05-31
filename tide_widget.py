@@ -171,7 +171,7 @@ class TideWidget(QWidget):
 		return v in ('True')
 
 
-	def inputDict(self):
+	def inputDict1(self):
 
 		location = self.locLineForm.text()
 		time = self.timeHeaderLineForm.text()
@@ -185,6 +185,13 @@ class TideWidget(QWidget):
 
 		depth_array = raw[depth].values
 		time_array = raw.index
+
+		input_dict = {'depth':depth_array, 'time':time_array}
+
+		return input_dict
+
+
+	def inputDict2(self):
 
 		lat = self.latDSB.value()
 		if lat == 0.0:
@@ -203,14 +210,14 @@ class TideWidget(QWidget):
 
 		save_file = self.saveLocLineForm.text()
 
-		input_dict = {'depth':depth_array, 'time':time_array, 'latitude':lat, 'predicted time':time_predic, 'save':save_file}
+		input_dict = {'latitude':lat, 'predicted time':time_predic, 'save':save_file}
 
 		return input_dict
 
 
 	def plotLoad(self):
 
-		input_dict = self.inputDict()
+		input_dict = self.inputDict1()
 
 		ad = input_dict['depth']
 		at = input_dict['time']
@@ -225,10 +232,10 @@ class TideWidget(QWidget):
 
 	def plotPredic(self, water_level):
 
-		input_dict = self.inputDict()
+		input_dict2 = self.inputDict2()
 
 		ad = water_level
-		at = input_dict['predicted time']
+		at = input_dict2['predicted time']
 		data_label = 'Predicted Data using ' + self.methodLabel.text()
 
 		plt.figure(figsize=(10, 5))
@@ -248,8 +255,8 @@ class TideWidget(QWidget):
 
 	def analyse(self):
 
-		input_dict = self.inputDict()
-		save_file = input_dict['save']
+		input_dict2 = self.inputDict2()
+		save_file = input_dict2['save']
 
 		method_dict = {'T Tide':self.ttideAnalyse, 'U Tide':self.utideAnalyse}
 		method = self.methodLabel.text()
@@ -274,14 +281,14 @@ class TideWidget(QWidget):
 
 	def predict(self):
 
-		input_dict = self.inputDict()
-		save_file = input_dict['save']
+		input_dict2 = self.inputDict2()
+		save_file = input_dict2['save']
 
 		method_dict = {'T Tide':self.ttidePredict, 'U Tide':self.utidePredict}
 		method = self.methodLabel.text()
 		prediction = method_dict[method]()
 
-		time = input_dict['predicted time']
+		time = input_dict2['predicted time']
 		
 		if method == 'T Tide':
 			water_level = prediction
@@ -303,14 +310,15 @@ class TideWidget(QWidget):
 
 	def ttideAnalyse(self):
 
-		input_dict = self.inputDict()
-		ad = input_dict['depth']
-		at = input_dict['time']
-		latitude = input_dict['latitude']
+		input_dict1 = self.inputDict1()
+		input_dict2 = self.inputDict2()
+		ad = input_dict1['depth']
+		at = input_dict1['time']
+		latitude = input_dict2['latitude']
 		time_diff = np.timedelta64(at[1]-at[0], 'm').astype('float64') / 60
 		time_num = date2num(at.to_pydatetime())
 
-		time_predic = input_dict['predicted time']
+		time_predic = input_dict2['predicted time']
 
 		coef = t_tide(ad, dt=time_diff, stime=time_num[0], lat=latitude, synth=0)
 
@@ -319,10 +327,11 @@ class TideWidget(QWidget):
 
 	def ttidePredict(self):
 
-		input_dict = self.inputDict()
-		ad = input_dict['depth']
+		input_dict1 = self.inputDict1()
+		input_dict2 = self.inputDict2()
+		ad = input_dict1['depth']
 
-		time_predic = input_dict['predicted time']
+		time_predic = input_dict2['predicted time']
 		time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = self.ttideAnalyse()
@@ -333,12 +342,13 @@ class TideWidget(QWidget):
 
 	def utideAnalyse(self):
 
-		input_dict = self.inputDict()
-		ad = input_dict['depth']
-		at = input_dict['time']
+		input_dict1 = self.inputDict1()
+		input_dict2 = self.inputDict2()
+		ad = input_dict1['depth']
+		at = input_dict1['time']
 
 		time_num = date2num(at.to_pydatetime())
-		latitude = input_dict['latitude']
+		latitude = input_dict2['latitude']
 
 		coef = solve(time_num, ad, lat=latitude)
 
@@ -347,9 +357,9 @@ class TideWidget(QWidget):
 
 	def utidePredict(self):
 
-		input_dict = self.inputDict()
+		input_dict2 = self.inputDict2()
 
-		time_predic = input_dict['predicted time']
+		time_predic = input_dict2['predicted time']
 		time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = self.utideAnalyse()

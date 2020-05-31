@@ -251,23 +251,22 @@ class TideWidget(QWidget):
 		input_dict = self.inputDict()
 		save_file = input_dict['save']
 
-		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
+		method_dict = {'T Tide':self.ttideAnalyse, 'U Tide':self.utideAnalyse}
 		method = self.methodLabel.text()
-		result = method_dict[method]()
-		coef_dict = result['coefficient']
+		coef = method_dict[method]()
 
 		method = method.replace(' ', '-')
 		text_edit = '_' + method + '_report.txt'
 		save_file = save_file.replace('.txt', text_edit)
 
 		if method == 'T-Tide':
-			print_coef = t_utils.pandas_style(coef_dict)
+			print_coef = t_utils.pandas_style(coef)
 			report = open(save_file, 'w')
 			report.write(print_coef)
 		elif method == 'U-Tide':
-			print_coef = pd.DataFrame({'name': coef_dict.name, 'frq': coef_dict.aux.frq, 'lind': coef_dict.aux.lind, 
-			'A': coef_dict.A, 'g': coef_dict.g, 'A_ci': coef_dict.A_ci, 'g_ci': coef_dict.g_ci, 
-			'PE': coef_dict.diagn['PE'], 'SNR': coef_dict.diagn['SNR']})
+			print_coef = pd.DataFrame({'name': coef.name, 'frq': coef.aux.frq, 'lind': coef.aux.lind, 
+			'A': coef.A, 'g': coef.g, 'A_ci': coef.A_ci, 'g_ci': coef.g_ci, 'PE': coef.diagn['PE'], 
+			'SNR': coef.diagn['SNR']})
 			print_coef.index = print_coef['name']
 			print_coef = print_coef.iloc[:, 1:]
 			print_coef.to_csv(save_file, sep='\t')
@@ -278,17 +277,16 @@ class TideWidget(QWidget):
 		input_dict = self.inputDict()
 		save_file = input_dict['save']
 
-		method_dict = {'T Tide':self.ttide, 'U Tide':self.utide}
+		method_dict = {'T Tide':self.ttidePredict, 'U Tide':self.utidePredict}
 		method = self.methodLabel.text()
-		result = method_dict[method]()
+		prediction = method_dict[method]()
 
 		time = input_dict['predicted time']
-		prediction_dict = result['prediction']
 		
 		if method == 'T Tide':
-			water_level = prediction_dict
+			water_level = prediction
 		elif method == 'U Tide':
-			water_level = prediction_dict['h']
+			water_level = prediction['h']
 
 		method = method.replace(' ', '-')
 		text_edit = '_' + method + '.txt'
@@ -303,7 +301,7 @@ class TideWidget(QWidget):
 		self.plotPredic(water_level)
 
 
-	def ttide(self):
+	def ttideAnalyse(self):
 
 		input_dict = self.inputDict()
 		ad = input_dict['depth']
@@ -313,17 +311,27 @@ class TideWidget(QWidget):
 		time_num = date2num(at.to_pydatetime())
 
 		time_predic = input_dict['predicted time']
-		time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = t_tide(ad, dt=time_diff, stime=time_num[0], lat=latitude, synth=0)
+
+		return coef
+
+
+	def ttidePredict(self):
+
+		input_dict = self.inputDict()
+		ad = input_dict['depth']
+
+		time_predic = input_dict['predicted time']
+		time_predic_num = date2num(time_predic.to_pydatetime())
+
+		coef = self.ttideAnalyse()
 		predic = coef(time_predic_num) + np.nanmean(ad)
 
-		output_dict = {'coefficient':coef, 'prediction':predic}
-
-		return output_dict
+		return predic
 
 
-	def utide(self):
+	def utideAnalyse(self):
 
 		input_dict = self.inputDict()
 		ad = input_dict['depth']
@@ -332,15 +340,22 @@ class TideWidget(QWidget):
 		time_num = date2num(at.to_pydatetime())
 		latitude = input_dict['latitude']
 
+		coef = solve(time_num, ad, lat=latitude)
+
+		return coef
+
+
+	def utidePredict(self):
+
+		input_dict = self.inputDict()
+
 		time_predic = input_dict['predicted time']
 		time_predic_num = date2num(time_predic.to_pydatetime())
 
-		coef = solve(time_num, ad, lat=latitude)
+		coef = self.utideAnalyse()
 		predic = reconstruct(time_predic_num, coef, min_SNR=0)
 
-		output_dict = {'coefficient':coef, 'prediction':predic}
-
-		return output_dict
+		return predic
 
 
 	def howToDialog(self):
@@ -366,12 +381,10 @@ class TideWidget(QWidget):
 
 	def aboutDialog(self):
 
-		# about = QMessageBox()
 		about = QDialog()
 		about.setWindowTitle('About')
 		closeButton = QPushButton("Close")
 		closeButton.clicked.connect(about.close)
-		# about.setText('This is a tidal analysis GUI using T Tide and U Tide (both Python version)')
 
 		aboutText = '''<body>
 		This is a tidal analysis GUI using T Tide and U Tide (both Python version).

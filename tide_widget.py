@@ -31,7 +31,7 @@ class TideWidget(QWidget):
 	def initUI(self):
 
 		self.setGeometry(300, 100, 480, 640)
-		self.setWindowTitle('Tide')
+		self.setWindowTitle('TideTide Analysis and Prediction GUI')
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
 		fileLocButton = QPushButton('Open File Location')

@@ -3,10 +3,10 @@
 import sys
 from pathlib import Path
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
+from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QDialog,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-							 QAbstractSpinBox, QDialog, QCheckBox)
+							 QCheckBox, QTableWidget, QScrollArea, QTableWidgetItem)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -324,6 +324,8 @@ class TideWidget(QWidget):
 		predic_out.index = predic_out['Time']
 		predic_out = predic_out.iloc[:, 0:1]
 
+		self.showPredicDialog(predic_out)
+
 		if self.saveState.text() == 'Save Prediction':
 			method = method.replace(' ', '-')
 			text_edit = '_' + method + '.txt'
@@ -396,6 +398,33 @@ class TideWidget(QWidget):
 		predic = reconstruct(time_predic_num, coef, min_SNR=0)
 
 		return predic
+
+
+	def showPredicDialog(self, data):
+
+		showPredic = QWidget()
+		showPredic.setWindowTitle('Tide Prediction')
+		showPredic.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+		closeButton = QPushButton("Close")
+		closeButton.clicked.connect(showPredic.close)
+
+		table = QTableWidget()
+		scroll = QScrollArea()
+		vbox = QVBoxLayout()
+		scroll.setWidget(table)
+		vbox.addWidget(table)
+		showPredic.setLayout(vbox)
+
+		table.setColumnCount(len(data.columns))
+		table.setRowCount(len(data.index))
+
+		for i in range(len(data.index)):
+			for j in range(len(data.columns)):
+				table.setItem(i, j, QTableWidgetItem(data.iloc[i, j]))
+			
+			table.setVerticalHeaderItem(i, data.index[i])
+		
+		showPredic.exec_()
 
 
 	def howToDialog(self):

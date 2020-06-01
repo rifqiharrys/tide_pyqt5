@@ -320,11 +320,11 @@ class TideWidget(QWidget):
 		elif method == 'U Tide':
 			water_level = prediction['h']
 
-		predic_out = pd.DataFrame({'Depth':water_level,'Time':time})
+		predic_out = pd.DataFrame({'Time':time, 'Depth':water_level})
+		self.showPredicDialog(predic_out)
 		predic_out.index = predic_out['Time']
 		predic_out = predic_out.iloc[:, 0:1]
 
-		self.showPredicDialog(predic_out)
 
 		if self.saveState.text() == 'Save Prediction':
 			method = method.replace(' ', '-')
@@ -402,9 +402,10 @@ class TideWidget(QWidget):
 
 	def showPredicDialog(self, data):
 
-		showPredic = QWidget()
+		showPredic = QDialog()
 		showPredic.setWindowTitle('Tide Prediction')
 		showPredic.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+		# showPredic.resize(480, 640)
 		closeButton = QPushButton("Close")
 		closeButton.clicked.connect(showPredic.close)
 
@@ -418,12 +419,14 @@ class TideWidget(QWidget):
 		table.setColumnCount(len(data.columns))
 		table.setRowCount(len(data.index))
 
+		for h in range(len(data.columns)):
+			table.setHorizontalHeaderItem(h, QTableWidgetItem(data.columns[h]))
+
 		for i in range(len(data.index)):
 			for j in range(len(data.columns)):
-				table.setItem(i, j, QTableWidgetItem(data.iloc[i, j]))
-			
-			table.setVerticalHeaderItem(i, data.index[i])
-		
+				table.setItem(i, j, QTableWidgetItem(str(data.iloc[i, j])))
+
+
 		showPredic.exec_()
 
 

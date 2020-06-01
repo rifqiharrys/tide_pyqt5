@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QAction,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-							 QAbstractSpinBox, QDialog)
+							 QAbstractSpinBox, QDialog, QCheckBox)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -95,6 +95,16 @@ class TideWidget(QWidget):
 		predicButton = QPushButton('Predict Tide')
 		predicButton.clicked.connect(self.predict)
 
+		self.saveCheckBox = QCheckBox('Save Prediction')
+		self.saveCheckBox.setChecked(True)
+		self.saveCheckBox.toggled.connect(self.checkBox)
+		self.saveState = QLabel()
+
+		self.plotCheckBox = QCheckBox('Plot Prediction')
+		self.plotCheckBox.setChecked(True)
+		self.plotCheckBox.toggled.connect(self.checkBox)
+		self.plotState = QLabel()
+
 
 		# vploadButton = QPushButton('Load Valeport Data')
 		howToButton = QPushButton('How To Use')
@@ -132,8 +142,10 @@ class TideWidget(QWidget):
 		grid.addWidget(freqLabel, 13, 1, 1, 1)
 		grid.addWidget(self.freqSB, 13, 2, 1, 2)
 		grid.addWidget(self.freqUnitCB, 13, 4, 1, 1)
-		grid.addWidget(solveButton, 14, 1, 1, 2)
-		grid.addWidget(predicButton, 14, 3, 1, 2)
+		grid.addWidget(self.saveCheckBox, 14, 2, 1, 1)
+		grid.addWidget(self.plotCheckBox, 14, 3, 1, 1)
+		grid.addWidget(solveButton, 14, 1, 1, 1)
+		grid.addWidget(predicButton, 14, 4, 1, 1)
 
 
 		vbox.addStretch(1)
@@ -253,6 +265,19 @@ class TideWidget(QWidget):
 			self.methodLabel.setText(method_button.text())
 
 
+	def checkBox(self):
+
+		if self.saveCheckBox.isChecked() == True:
+			self.saveState.setText(self.saveCheckBox.text())
+		else:
+			self.saveState.setText('unchecked')
+
+		if self.plotCheckBox.isChecked() == True:
+			self.plotState.setText(self.plotCheckBox.text())
+		else:
+			self.plotState.setText('unchecked')
+
+
 	def analyse(self):
 
 		input_dict2 = self.inputDict2()
@@ -289,23 +314,28 @@ class TideWidget(QWidget):
 		prediction = method_dict[method]()
 
 		time = input_dict2['predicted time']
-		
+
 		if method == 'T Tide':
 			water_level = prediction
 		elif method == 'U Tide':
 			water_level = prediction['h']
 
-		method = method.replace(' ', '-')
-		text_edit = '_' + method + '.txt'
-		save_file = save_file.replace('.txt', text_edit)
-
 		predic_out = pd.DataFrame({'Depth':water_level,'Time':time})
 		predic_out.index = predic_out['Time']
 		predic_out = predic_out.iloc[:, 0:1]
 
-		predic_out.to_csv(save_file, sep='\t')
+		if self.saveState.text() == 'Save Prediction':
+			method = method.replace(' ', '-')
+			text_edit = '_' + method + '.txt'
+			save_file = save_file.replace('.txt', text_edit)
+			predic_out.to_csv(save_file, sep='\t')
+		else:
+			pass
 
-		self.plotPredic(water_level)
+		if self.plotState.text() == 'Plot Prediction':
+			self.plotPredic(water_level)
+		else:
+			pass
 
 
 	def ttideAnalyse(self):

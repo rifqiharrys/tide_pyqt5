@@ -68,6 +68,6 @@ In order to use this tide analysis and prediction GUI for python, you need to pr
 
 12. Push "Analyse Tide" button if you wish to save the tide parameters. The report will be saved in the save location that you insert before with an addition of "report" and the tide method at the end of the file name.
 
-13. Select the checkboxes in the middle of "Analyse Tide" and "Predict Tide" button as you desire. The default state would be checked on both checkboxes (save prediction and plot prediction)
+13. Select the checkboxes in the middle of "Analyse Tide" and "Predict Tide" button as you desire. The default state would be checked on both checkboxes (save prediction and plot prediction). If you unselect both checkboxes, pushing "Predict Tide" button will lead to showing tide prediction table.
 
 14. Push "Predict Tide" button if wish to go straight to make tide prediction without saving tidal analysis parameters into a file. If you check on "Save Prediction" box, the tide prediction file will be saved in the save location that you insert before with an addition of the tide method at the end of the file name.

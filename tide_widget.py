@@ -411,10 +411,11 @@ class TideWidget(QWidget):
 
 		table = QTableWidget()
 		scroll = QScrollArea()
-		vbox = QVBoxLayout()
+		grid = QGridLayout()
 		scroll.setWidget(table)
-		vbox.addWidget(table)
-		showPredic.setLayout(vbox)
+		grid.addWidget(table, 1, 1, 25, 4)
+		grid.addWidget(closeButton, 26, 4, 1, 1)
+		showPredic.setLayout(grid)
 
 		table.setColumnCount(len(data.columns))
 		table.setRowCount(len(data.index))

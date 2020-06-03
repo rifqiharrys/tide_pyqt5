@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QDialog,
 							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
-							 QCheckBox, QTableWidget, QScrollArea, QTableWidgetItem)
+							 QCheckBox, QTableWidget, QScrollArea, QTableWidgetItem, QHeaderView)
 from PyQt5.QtGui import QIcon
 # from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
@@ -411,11 +411,12 @@ class TideWidget(QWidget):
 		showPredic = QDialog()
 		showPredic.setWindowTitle('Tide Prediction')
 		showPredic.setWindowIcon(QIcon('wave-pngrepo-com.png'))
-		# showPredic.resize(480, 640)
+		showPredic.resize(320, 720)
 		closeButton = QPushButton("Close")
 		closeButton.clicked.connect(showPredic.close)
 
 		table = QTableWidget()
+		header = table.horizontalHeader()
 		scroll = QScrollArea()
 		grid = QGridLayout()
 		scroll.setWidget(table)
@@ -433,7 +434,8 @@ class TideWidget(QWidget):
 			for j in range(len(data.columns)):
 				table.setItem(i, j, QTableWidgetItem(str(data.iloc[i, j])))
 
-
+		header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+		header.setSectionResizeMode(1, QHeaderView.Stretch)
 		showPredic.exec_()
 
 

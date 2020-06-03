@@ -72,7 +72,6 @@ class TideWidget(QWidget):
 		self.latDSB.setRange(-90.0, 90.0)
 		self.latDSB.setDecimals(6)
 		self.latDSB.setValue(0.000001)
-		# self.latDSB.setStepType(QAbstractSpinBox.AdaptiveDecimalStepType)
 
 		self.saveLocLineForm = QLineEdit()
 		saveLocButton = QPushButton('Save File Location')

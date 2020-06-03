@@ -13,7 +13,7 @@ A description of the theoretical basis of the analysis and some implementation d
 
 >R. Pawlowicz, B. Beardsley, and S. Lentz, "Classical tidal harmonic analysis including error estimates in MATLAB using T_TIDE", Computers and Geosciences 28 (2002), 929-937. 
       
->Codiga, Daniel. (2011). Unified tidal analysis and prediction using the UTide Matlab functions. 10.13140/RG.2.1.3761.2008. 
+>Codiga, D.L., 2011. Unified Tidal Analysis and Prediction Using the UTide Matlab Functions. Technical Report 2011-01. Graduate School of Oceanography, University of Rhode Island, Narragansett, RI. 59pp.
 
 ## Getting Started
 In order to use this tide analysis and prediction GUI for python, you need to prepare several dependencies beforehand

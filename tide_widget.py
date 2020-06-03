@@ -63,14 +63,15 @@ class TideWidget(QWidget):
 		tideAnalysisLabel.setAlignment(Qt.AlignLeft)
 		self.ttideButton = QRadioButton('T Tide')
 		self.ttideButton.toggled.connect(self.methodButton)
+		self.ttideButton.setChecked(True)
 		self.utideButton = QRadioButton('U Tide')
 		self.utideButton.toggled.connect(self.methodButton)
-		self.utideButton.setChecked(True)
 
 		latLabel = QLabel('Latitude (dd.ddddd):')
 		self.latDSB = QDoubleSpinBox()
 		self.latDSB.setRange(-90.0, 90.0)
 		self.latDSB.setDecimals(6)
+		self.latDSB.setValue(0.000001)
 		# self.latDSB.setStepType(QAbstractSpinBox.AdaptiveDecimalStepType)
 
 		self.saveLocLineForm = QLineEdit()
@@ -87,6 +88,7 @@ class TideWidget(QWidget):
 
 		freqLabel = QLabel('Time Interval:')
 		self.freqSB = QSpinBox()
+		self.freqSB.setValue(1)
 		self.freqUnitCB = QComboBox()
 		self.freqUnitCB.addItems(['hours', 'minutes'])
 
@@ -321,15 +323,15 @@ class TideWidget(QWidget):
 			water_level = prediction['h']
 
 		predic_out = pd.DataFrame({'Time':time, 'Depth':water_level})
-		self.showPredicDialog(predic_out)
-		predic_out.index = predic_out['Time']
-		predic_out = predic_out.iloc[:, 0:1]
 
 
 		if self.saveState.text() == 'Save Prediction':
 			method = method.replace(' ', '-')
 			text_edit = '_' + method + '.txt'
 			save_file = save_file.replace('.txt', text_edit)
+
+			predic_out.index = predic_out['Time']
+			predic_out = predic_out.iloc[:, 0:1]
 			predic_out.to_csv(save_file, sep='\t')
 		else:
 			pass
@@ -338,6 +340,10 @@ class TideWidget(QWidget):
 			self.plotPredic(water_level)
 		else:
 			pass
+
+		if self.saveState.text() == 'unchecked' and self.plotState.text() == 'unchecked':
+			self.showPredicDialog(predic_out)
+
 
 
 	def ttideAnalyse(self):

@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QDialog,
-							 QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout, QComboBox, QLabel,
+							 QGridLayout, QFormLayout, QMessageBox, QVBoxLayout, QComboBox, QLabel,
 							 QRadioButton, QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox,
 							 QCheckBox, QTableWidget, QScrollArea, QTableWidgetItem, QHeaderView)
 from PyQt5.QtGui import QIcon
@@ -206,9 +206,8 @@ class TideWidget(QWidget):
 
 	def inputDict2(self):
 
-		lat = self.latDSB.value()
-		if lat == 0.0:
-			lat = None
+		if self.latDSB.value() == 0.0:
+			self.zeroWarning()
 		else:
 			lat = self.latDSB.value()
 
@@ -217,7 +216,11 @@ class TideWidget(QWidget):
 
 		freq_unit_dict = {'hours':'H', 'minutes':'min'}
 		freq_unit_value = freq_unit_dict[self.freqUnitCB.currentText()]
-		frequency = str(self.freqSB.value()) + freq_unit_value
+
+		if self.freqSB.value() == 0:
+			self.zeroWarning()
+		else:
+			frequency = str(self.freqSB.value()) + freq_unit_value
 
 		time_predic = pd.date_range(start=startcal_string, end=endcal_string, freq=frequency)
 
@@ -403,6 +406,16 @@ class TideWidget(QWidget):
 		predic = reconstruct(time_predic_num, coef, min_SNR=0)
 
 		return predic
+
+
+	def zeroWarning(self):
+
+		zeroWarning = QMessageBox()
+		zeroWarning.setWindowTitle('Warning')
+		zeroWarning.setIcon(QMessageBox.Critical)
+		zeroWarning.setText('Cannot process zero value.')
+
+		zeroWarning.exec_()
 
 
 	def showPredicDialog(self, data):

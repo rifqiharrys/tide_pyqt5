@@ -7,7 +7,7 @@ Both T Tide and U Tide developed by two different entities.
 The original versions of [T Tide](https://www.eoas.ubc.ca/~rich/#T_Tide "T Tide Harmonic Analysis Toolbox") and [U Tide](https://www.mathworks.com/matlabcentral/fileexchange/46523-utide-unified-tidal-analysis-and-prediction-functions?w.mathworks.com "UTide Unified Tidal Analysis and Prediction Functions") 
 are in MATLAB language developed by _R. Pawlowicz et. al_ (T Tide) and _Daniel Codiga_ (U Tide).
 
-The python version of [T Tide](https://github.com/moflaher/ttide_py "T Tide for Python") and [U Tide](https://github.com/wesleybowman/UTide "U Tide for Python) were developed by _moflaher_ (T Tide) and _Wesley Bowman_ (U Tide).
+The python version of [T Tide](https://github.com/moflaher/ttide_py "T Tide for Python") and [U Tide](https://github.com/wesleybowman/UTide "U Tide for Python") were developed by _moflaher_ (T Tide) and _Wesley Bowman_ (U Tide).
 
 A description of the theoretical basis of the analysis and some implementation details of T Tide and U Tide Matlab version can be found in:
 

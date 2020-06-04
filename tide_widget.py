@@ -206,20 +206,16 @@ class TideWidget(QWidget):
 
 	def inputDict2(self):
 
-		if self.latDSB.value() == 0.0:
-			self.zeroWarning()
-		else:
-			lat = self.latDSB.value()
-
 		startcal_string = self.startcal.selectedDate().toString(Qt.ISODate)
 		endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
 
 		freq_unit_dict = {'hours':'H', 'minutes':'min'}
 		freq_unit_value = freq_unit_dict[self.freqUnitCB.currentText()]
 
-		if self.freqSB.value() == 0:
+		if self.latDSB.value() == 0.0 or self.freqSB.value() == 0:
 			self.zeroWarning()
 		else:
+			lat = self.latDSB.value()
 			frequency = str(self.freqSB.value()) + freq_unit_value
 
 		time_predic = pd.date_range(start=startcal_string, end=endcal_string, freq=frequency)

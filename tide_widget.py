@@ -214,6 +214,7 @@ class TideWidget(QWidget):
 
 		if self.latDSB.value() == 0.0 or self.freqSB.value() == 0:
 			self.zeroWarning()
+			lat = None
 		else:
 			lat = self.latDSB.value()
 			frequency = str(self.freqSB.value()) + freq_unit_value

@@ -344,7 +344,6 @@ class TideWidget(QWidget):
 			self.showPredicDialog(predic_out)
 
 
-
 	def ttideAnalyse(self):
 
 		input_dict1 = self.inputDict1()

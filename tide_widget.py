@@ -118,7 +118,8 @@ class TideWidget(QWidget):
 		vbox = QVBoxLayout()
 		
 		grid.addWidget(fileLocButton, 1, 1, 1, 1)
-		grid.addWidget(self.locLineForm, 1, 2, 1, 2)
+		grid.addWidget(self.locLineForm, 1, 2, 1, 1)
+		grid.addWidget(vpConvertButton, 1, 3, 1, 1)
 		grid.addWidget(plotObsButton, 1, 4, 1, 1)
 		grid.addWidget(timeHeaderLabel, 2, 1, 1, 1)
 		grid.addWidget(self.timeHeaderLineForm, 2, 2, 1, 1)

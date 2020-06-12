@@ -41,8 +41,8 @@ class TideWidget(QWidget):
 
 		fileLocButton = QPushButton('Open File Location')
 		fileLocButton.clicked.connect(self.inputPathDialog)
-		vpConvertButton = QPushButton('Convert Valeport Data')
-		vpConvertButton.clicked.connect(self.valeport)
+		mergeButton = QPushButton('Merge Data')
+		mergeButton.clicked.connect(self.valeport)
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()
@@ -134,7 +134,7 @@ class TideWidget(QWidget):
 		grid.addWidget(fileLocButton, 1, 1, 1, 1)
 		grid.addWidget(self.locLineForm, 1, 2, 1, 1)
 		grid.addWidget(plotObsButton, 1, 3, 1, 1)
-		grid.addWidget(vpConvertButton, 1, 4, 1, 1)
+		grid.addWidget(mergeButton, 1, 4, 1, 1)
 
 		grid.addWidget(headerLineLabel, 2, 1, 1, 1)
 		grid.addWidget(self.headerLineSB, 2, 2, 1, 1)

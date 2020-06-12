@@ -15,10 +15,10 @@ import os
 
 
 
-class ValeportConvert(QWidget):
+class MergeData(QWidget):
 
 	def __init__(self):
-		super(ValeportConvert, self).__init__()
+		super(MergeData, self).__init__()
 
 		self.initUI()
 
@@ -27,20 +27,20 @@ class ValeportConvert(QWidget):
 
 		# self.setGeometry(300, 100, 480, 640)
 		self.resize(480, 640)
-		self.setWindowTitle('Valeport Data Conversion GUI')
+		self.setWindowTitle('Merge Data GUI')
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
 
 def entry():
 
-	global vp
-	vp = ValeportConvert()
-	vp.show()
+	global merge
+	merge = MergeData()
+	merge.show()
 
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	entry()
-	# vp = ValeportConvert()
-	# vp.show()
+	# merge = ValeportConvert()
+	# merge.show()
 	sys.exit(app.exec_())

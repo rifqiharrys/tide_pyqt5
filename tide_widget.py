@@ -133,8 +133,8 @@ class TideWidget(QWidget):
 		
 		grid.addWidget(fileLocButton, 1, 1, 1, 1)
 		grid.addWidget(self.locLineForm, 1, 2, 1, 1)
-		grid.addWidget(plotObsButton, 1, 3, 1, 1)
-		grid.addWidget(mergeButton, 1, 4, 1, 1)
+		grid.addWidget(mergeButton, 1, 3, 1, 1)
+		grid.addWidget(plotObsButton, 1, 4, 1, 1)
 
 		grid.addWidget(headerLineLabel, 2, 1, 1, 1)
 		grid.addWidget(self.headerLineSB, 2, 2, 1, 1)

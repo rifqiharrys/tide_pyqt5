@@ -17,7 +17,7 @@ from matplotlib.dates import date2num
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
-import tide_vp
+import tide_merge
 
 
 
@@ -29,9 +29,9 @@ class TideWidget(QWidget):
 		self.initUI()
 
 
-	def valeport(self):
+	def mergeData(self):
 
-		tide_vp.entry()
+		tide_merge.entry()
 
 	def initUI(self):
 
@@ -42,7 +42,7 @@ class TideWidget(QWidget):
 		fileLocButton = QPushButton('Open File Location')
 		fileLocButton.clicked.connect(self.inputPathDialog)
 		mergeButton = QPushButton('Merge Data')
-		mergeButton.clicked.connect(self.valeport)
+		mergeButton.clicked.connect(self.mergeData)
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()

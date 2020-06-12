@@ -47,6 +47,14 @@ class TideWidget(QWidget):
 		plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()
 
+		headerLineLabel = QLabel('Header Starting Line:')
+		self.headerLineSB = QSpinBox()
+		self.headerLineSB.setMinimum(1)
+
+		dataLineLabel = QLabel('Data Starting Line:')
+		self.dataLineSB = QSpinBox()
+		self.dataLineSB.setMinimum(1)
+
 		timeHeaderLabel = QLabel('Time Header:')
 		self.timeHeaderLineForm = QLineEdit()
 
@@ -127,34 +135,49 @@ class TideWidget(QWidget):
 		grid.addWidget(self.locLineForm, 1, 2, 1, 1)
 		grid.addWidget(plotObsButton, 1, 3, 1, 1)
 		grid.addWidget(vpConvertButton, 1, 4, 1, 1)
-		grid.addWidget(timeHeaderLabel, 2, 1, 1, 1)
-		grid.addWidget(self.timeHeaderLineForm, 2, 2, 1, 1)
-		grid.addWidget(depthHeaderLabel, 2, 3, 1, 1)
-		grid.addWidget(self.depthHeaderLineForm, 2, 4, 1, 1)
-		grid.addWidget(dayFirstLabel, 3, 1, 1, 1)
-		grid.addWidget(self.dayFirstCB, 3, 2, 1, 1)
-		grid.addWidget(sepLabel, 3, 3, 1, 1)
-		grid.addWidget(self.sepCB, 3, 4, 1, 1)
-		grid.addWidget(self.dataFrame, 4, 1, 4, 4)
-		grid.addWidget(self.methodLabel, 8, 1, 1, 2)
-		grid.addWidget(tideAnalysisLabel, 8, 3, 1, 2)
-		grid.addWidget(self.ttideButton, 9, 1, 1, 2)
-		grid.addWidget(self.utideButton, 9, 3, 1, 2)
-		grid.addWidget(latLabel, 10, 1, 1, 1)
-		grid.addWidget(self.latDSB, 10, 2, 1, 1)
-		grid.addWidget(saveLocButton, 10, 3, 1, 1)
-		grid.addWidget(self.saveLocLineForm, 10, 4, 1, 1)
-		grid.addWidget(startcalLabel, 11, 1, 1, 2)
-		grid.addWidget(endcalLabel, 11, 3, 1, 2)
-		grid.addWidget(self.startcal, 12, 1, 1, 2)
-		grid.addWidget(self.endcal, 12, 3, 1, 2)
-		grid.addWidget(freqLabel, 13, 1, 1, 1)
-		grid.addWidget(self.freqSB, 13, 2, 1, 2)
-		grid.addWidget(self.freqUnitCB, 13, 4, 1, 1)
-		grid.addWidget(self.saveCheckBox, 14, 2, 1, 1)
-		grid.addWidget(self.plotCheckBox, 14, 3, 1, 1)
-		grid.addWidget(solveButton, 14, 1, 1, 1)
-		grid.addWidget(predicButton, 14, 4, 1, 1)
+
+		grid.addWidget(headerLineLabel, 2, 1, 1, 1)
+		grid.addWidget(self.headerLineSB, 2, 2, 1, 1)
+		grid.addWidget(dataLineLabel, 2, 3, 1, 1)
+		grid.addWidget(self.dataLineSB, 2, 4, 1, 1)
+
+		grid.addWidget(timeHeaderLabel, 3, 1, 1, 1)
+		grid.addWidget(self.timeHeaderLineForm, 3, 2, 1, 1)
+		grid.addWidget(depthHeaderLabel, 3, 3, 1, 1)
+		grid.addWidget(self.depthHeaderLineForm, 3, 4, 1, 1)
+
+		grid.addWidget(dayFirstLabel, 4, 1, 1, 1)
+		grid.addWidget(self.dayFirstCB, 4, 2, 1, 1)
+		grid.addWidget(sepLabel, 4, 3, 1, 1)
+		grid.addWidget(self.sepCB, 4, 4, 1, 1)
+
+		grid.addWidget(self.dataFrame, 5, 1, 4, 4)
+
+		grid.addWidget(self.methodLabel, 9, 1, 1, 2)
+		grid.addWidget(tideAnalysisLabel, 9, 3, 1, 2)
+
+		grid.addWidget(self.ttideButton, 10, 1, 1, 2)
+		grid.addWidget(self.utideButton, 10, 3, 1, 2)
+
+		grid.addWidget(latLabel, 11, 1, 1, 1)
+		grid.addWidget(self.latDSB, 11, 2, 1, 1)
+		grid.addWidget(saveLocButton, 11, 3, 1, 1)
+		grid.addWidget(self.saveLocLineForm, 11, 4, 1, 1)
+
+		grid.addWidget(startcalLabel, 12, 1, 1, 2)
+		grid.addWidget(endcalLabel, 12, 3, 1, 2)
+
+		grid.addWidget(self.startcal, 13, 1, 1, 2)
+		grid.addWidget(self.endcal, 13, 3, 1, 2)
+
+		grid.addWidget(freqLabel, 14, 1, 1, 1)
+		grid.addWidget(self.freqSB, 14, 2, 1, 2)
+		grid.addWidget(self.freqUnitCB, 14, 4, 1, 1)
+
+		grid.addWidget(self.saveCheckBox, 15, 2, 1, 1)
+		grid.addWidget(self.plotCheckBox, 15, 3, 1, 1)
+		grid.addWidget(solveButton, 15, 1, 1, 1)
+		grid.addWidget(predicButton, 15, 4, 1, 1)
 
 
 		vbox.addStretch(1)
@@ -195,13 +218,16 @@ class TideWidget(QWidget):
 	def inputDict1(self):
 
 		location = self.locLineForm.text()
+		head = self.headerLineSB.value() - 1
+		start_data = self.dataLineSB.value() - 1
 		time = self.timeHeaderLineForm.text()
 		depth = self.depthHeaderLineForm.text()
 		dayF = self.str2bool(self.dayFirstCB.currentText())
 		sepDict = {'Tab':'\t', 'Comma':',', 'Space':' ', 'Semicolon':';'}
 		sepSelect = sepDict[self.sepCB.currentText()]
 
-		raw = pd.read_csv(location, sep=sepSelect, index_col=time)
+		raw = pd.read_csv(location, sep=sepSelect, index_col=time, header=head)
+		raw = raw.iloc[start_data:,0:]
 		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
 
 		depth_array = raw[depth].values

@@ -25,7 +25,8 @@ class ValeportConvert(QWidget):
 
 	def initUI(self):
 
-		self.setGeometry(300, 100, 480, 640)
+		# self.setGeometry(300, 100, 480, 640)
+		self.resize(480, 640)
 		self.setWindowTitle('Valeport Data Conversion GUI')
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 

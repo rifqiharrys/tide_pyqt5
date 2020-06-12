@@ -48,26 +48,30 @@ In order to use this tide analysis and prediction GUI for python, you need to pr
 
  2. Push "Open File Location" button to locate your data, or insert your data path manually into a text box right beside the push button.
 
- 3. Type in timestamp and depth header name of your data into the text boxes with the corresponding name right beside it.
+ 3. Insert row/line number to use as the column names into "Header Starting Line" form. If the first line of the header is the column names, insert "1". If you use valeport data as an input file, insert "22" because the column names' location is on the 22nd line.
 
- 4. From Day First input, select "True" if your data timestamp parses dates with the day first. Otherwise, select "False" if your data doesn't begin with day first. As an example, if the time parses 10/09/2019 (October 9th 2019), select "False".
+ 4. Insert row/line number of your data starting right after the header or the column names into "Data Starting Line" form. If your data starting right after the header, insert "1". If you use valeport data as an input file, insert "2" because the data starts on the second line after the header.
 
- 5. Select your data separator.
+ 5. Type in timestamp and depth header name of your data into the text boxes with the corresponding name right beside it.
 
- 6. If you wish to plot the observation data, push "Plot Observation Data" which located on the right side of file location text box. Note that you have to insert timestamp and depth header first in order to plot your observation data.
+ 6. From Day First input, select "True" if your data timestamp parses dates with the day first. Otherwise, select "False" if your data doesn't begin with day first. As an example, if the time parses 10/09/2019 (October 9th 2019), select "False".
 
- 7. Select one of the tidal analysis method (T Tide or U Tide).
+ 7. Select your data separator.
 
- 8. Type in the latitude of your tide station in which your observation data was taken.
+ 8. If you wish to plot the observation data, push "Plot Observation Data" which located on the right side of file location text box. Note that you have to insert timestamp and depth header first in order to plot your observation data.
 
- 9. Push "Save File Location" button to select the location of analysed tidal data you wish to save in .txt format, or insert the data path manually into a text box on the right side of the push button.
+ 9. Select one of the tidal analysis method (T Tide or U Tide).
 
-10. Select the first and last date of tide prediction from two calendar boxes.
+10. Type in the latitude of your tide station in which your observation data was taken.
 
-11. Insert time interval of tide prediction in hourly unit or in minutes.
+11. Push "Save File Location" button to select the location of analysed tidal data you wish to save in .txt format, or insert the data path manually into a text box on the right side of the push button.
 
-12. Push "Analyse Tide" button if you wish to save the tide parameters. The report will be saved in the save location that you insert before with an addition of "report" and the tide method at the end of the file name.
+12. Select the first and last date of tide prediction from two calendar boxes.
 
-13. Select the checkboxes in the middle of "Analyse Tide" and "Predict Tide" button as you desire. The default state would be checked on both checkboxes (save prediction and plot prediction). If you unselect both checkboxes, pushing "Predict Tide" button will lead to showing tide prediction table.
+13. Insert time interval of tide prediction in hourly unit or in minutes.
 
-14. Push "Predict Tide" button if wish to go straight to make tide prediction without saving tidal analysis parameters into a file. If you check on "Save Prediction" box, the tide prediction file will be saved in the save location that you insert before with an addition of the tide method at the end of the file name.
+14. Push "Analyse Tide" button if you wish to save the tide parameters. The report will be saved in the save location that you insert before with an addition of "report" and the tide method at the end of the file name.
+
+15. Select the checkboxes in the middle of "Analyse Tide" and "Predict Tide" button as you desire. The default state would be checked on both checkboxes (save prediction and plot prediction). If you unselect both checkboxes, pushing "Predict Tide" button will lead to showing tide prediction table.
+
+16. Push "Predict Tide" button if wish to go straight to make tide prediction without saving tidal analysis parameters into a file. If you check on "Save Prediction" box, the tide prediction file will be saved in the save location that you insert before with an addition of the tide method at the end of the file name.

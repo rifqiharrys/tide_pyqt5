@@ -36,6 +36,7 @@ class TideWidget(QWidget):
 
 		fileLocButton = QPushButton('Open File Location')
 		fileLocButton.clicked.connect(self.inputPathDialog)
+		vpConvertButton = QPushButton('Convert Valeport Data')
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()

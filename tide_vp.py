@@ -30,13 +30,16 @@ class ValeportConvert(QWidget):
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
 
-def main():
+def entry():
 
-	app = QApplication(sys.argv)
+	global vp
 	vp = ValeportConvert()
 	vp.show()
-	sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
-	main()
+	app = QApplication(sys.argv)
+	entry()
+	# vp = ValeportConvert()
+	# vp.show()
+	sys.exit(app.exec_())

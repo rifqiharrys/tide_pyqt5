@@ -17,6 +17,7 @@ from matplotlib.dates import date2num
 import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
+import tide_vp
 
 
 
@@ -28,6 +29,10 @@ class TideWidget(QWidget):
 		self.initUI()
 
 
+	def valeport(self):
+
+		tide_vp.entry()
+
 	def initUI(self):
 
 		self.setGeometry(300, 100, 480, 640)
@@ -37,6 +42,7 @@ class TideWidget(QWidget):
 		fileLocButton = QPushButton('Open File Location')
 		fileLocButton.clicked.connect(self.inputPathDialog)
 		vpConvertButton = QPushButton('Convert Valeport Data')
+		vpConvertButton.clicked.connect(self.valeport)
 		plotObsButton = QPushButton('Plot Observation Data')
 		plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()

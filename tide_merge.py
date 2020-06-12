@@ -31,7 +31,7 @@ class MergeData(QWidget):
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
 		fileLocButton = QPushButton('Open File Location')
-		# fileLocButton.clicked.connect(self.inputPathDialog)
+		fileLocButton.clicked.connect(self.inputPathDialog)
 		# plotObsButton = QPushButton('Plot Observation Data')
 		# plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()
@@ -82,6 +82,16 @@ class MergeData(QWidget):
 		vbox.addStretch(1)
 		grid.addLayout(vbox, 20, 1)
 		self.setLayout(grid)
+
+
+	def inputPathDialog(self):
+
+		home_dir = str(Path.home())
+		fname = QFileDialog.getOpenFileNames(self, 'Load file', home_dir)
+		fnames = fname[0]
+		print(Path(fnames[0]))
+		# filePath = str(Path(fname[0]))
+		# self.locLineForm.setText(filePath)
 
 
 def entry():

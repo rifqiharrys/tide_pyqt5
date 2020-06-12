@@ -89,7 +89,11 @@ class MergeData(QWidget):
 		home_dir = str(Path.home())
 		fname = QFileDialog.getOpenFileNames(self, 'Load file', home_dir)
 		fnames = fname[0]
-		print(Path(fnames[0]))
+		fnames_str = ''
+		for l in range(len(fnames)):
+			fnames_str += fnames[l] + '\n'
+
+		print(fnames_str)
 		# filePath = str(Path(fname[0]))
 		# self.locLineForm.setText(filePath)
 

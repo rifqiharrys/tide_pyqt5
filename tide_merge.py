@@ -126,8 +126,8 @@ class MergeData(QWidget):
 	def merge(self):
 
 		input_dict = self.inputDict()
-		files = input_dict['dir'] + '*.[Tt][Xx][Tt]'
-		txtlist = glob.glob(files)
+		files = input_dict['dir'] + '/**/*.[Tt][Xx][Tt]'
+		txtlist = glob.glob(files, recursive=True)
 
 		dummy = []
 

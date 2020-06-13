@@ -83,6 +83,9 @@ class MergeData(QWidget):
 		grid.addWidget(sepLabel, 4, 3, 1, 1)
 		grid.addWidget(self.sepCB, 4, 4, 1, 1)
 
+		grid.addWidget(saveLocButton, 5, 1, 1, 1)
+		grid.addWidget(self.saveLocLineForm, 5, 2, 1, 3)
+
 		vbox.addStretch(1)
 		grid.addLayout(vbox, 20, 1)
 		self.setLayout(grid)
@@ -100,6 +103,16 @@ class MergeData(QWidget):
 		print(fnames_str)
 		# filePath = str(Path(fname[0]))
 		# self.locLineForm.setText(filePath)
+
+
+	def savePathDialog(self):
+
+		home_dir = str(Path.home())
+		fname = QFileDialog.getSaveFileName(
+			self, 'Save File', home_dir, "Text files (*.txt)")
+		filePath = (str(Path(fname[0])))
+		self.saveLocLineForm.setText(filePath)
+
 
 
 def entry():

@@ -229,6 +229,7 @@ class TideWidget(QWidget):
 		raw = pd.read_csv(location, sep=sepSelect, index_col=time, header=head)
 		raw = raw.iloc[start_data:,0:]
 		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
+		raw = raw.sort_index()
 
 		depth_array = raw[depth].values
 		time_array = raw.index

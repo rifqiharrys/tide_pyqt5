@@ -30,7 +30,7 @@ class MergeData(QWidget):
 		self.setWindowTitle('Merge Data GUI')
 		self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
-		fileLocButton = QPushButton('Open File Location')
+		fileLocButton = QPushButton('Open Folder Location')
 		fileLocButton.clicked.connect(self.inputPathDialog)
 		# plotObsButton = QPushButton('Plot Observation Data')
 		# plotObsButton.clicked.connect(self.plotLoad)
@@ -98,15 +98,14 @@ class MergeData(QWidget):
 	def inputPathDialog(self):
 
 		home_dir = str(Path.home())
-		fname = QFileDialog.getOpenFileNames(self, 'Load file', home_dir)
-		fnames = fname[0]
-		fnames_str = ''
-		for l in range(len(fnames)):
-			fnames_str += fnames[l] + '\n'
+		fname = QFileDialog.getExistingDirectory(self, 'Load file', home_dir)
+		# folderPath = str(Path(fname))
+		self.locLineForm.setText(fname)
 
-		print(fnames_str)
-		# filePath = str(Path(fname[0]))
-		# self.locLineForm.setText(filePath)
+		# fnames = fname[0]
+		# fnames_str = ''
+		# for l in range(len(fnames)):
+		# 	fnames_str += fnames[l] + '\n'
 
 
 	def savePathDialog(self):

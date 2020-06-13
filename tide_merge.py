@@ -62,6 +62,8 @@ class MergeData(QWidget):
 		saveLocButton.clicked.connect(self.savePathDialog)
 		self.saveLocLineForm = QLineEdit()
 
+		self.dataFrame = QTextBrowser()
+
 		grid = QGridLayout()
 		vbox = QVBoxLayout()
 
@@ -85,6 +87,8 @@ class MergeData(QWidget):
 
 		grid.addWidget(saveLocButton, 5, 1, 1, 1)
 		grid.addWidget(self.saveLocLineForm, 5, 2, 1, 3)
+
+		grid.addWidget(self.dataFrame, 6, 1, 4, 4)
 
 		vbox.addStretch(1)
 		grid.addLayout(vbox, 20, 1)

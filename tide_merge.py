@@ -58,6 +58,10 @@ class MergeData(QWidget):
 		self.sepCB = QComboBox()
 		self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
 
+		saveLocButton = QPushButton('Save File Location')
+		saveLocButton.clicked.connect(self.savePathDialog)
+		self.saveLocLineForm = QLineEdit()
+
 		grid = QGridLayout()
 		vbox = QVBoxLayout()
 

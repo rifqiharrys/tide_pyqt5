@@ -205,7 +205,7 @@ class TideWidget(QWidget):
 	def savePathDialog(self):
 
 		home_dir = str(Path.home())
-		fname = QFileDialog.getSaveFileName(self, 'Save File', home_dir, "Text files (*.txt)")
+		fname = QFileDialog.getSaveFileName(self, 'Save File', home_dir, 'Text files (*.txt)')
 		filePath = (str(Path(fname[0])))
 		self.saveLocLineForm.setText(filePath)
 

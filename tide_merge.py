@@ -51,16 +51,12 @@ class MergeData(QWidget):
 		self.sepCB = QComboBox()
 		self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
 
-		depthHeaderLabel = QLabel('Depth Header:')
-		self.depthHeaderLineForm = QLineEdit()
-
-		dayFirstLabel = QLabel('Day First:')
-		self.dayFirstCB = QComboBox()
-		self.dayFirstCB.addItems(['True', 'False'])
-
 		saveLocButton = QPushButton('Save File Location')
 		saveLocButton.clicked.connect(self.savePathDialog)
 		self.saveLocLineForm = QLineEdit()
+
+		startButton =  QPushButton('Start Merge')
+		startButton.clicked.connect(self.startMerge)
 
 		self.dataFrame = QTextBrowser()
 
@@ -81,7 +77,8 @@ class MergeData(QWidget):
 		grid.addWidget(self.indexLineForm, 3, 4, 1, 1)
 
 		grid.addWidget(saveLocButton, 4, 1, 1, 1)
-		grid.addWidget(self.saveLocLineForm, 4, 2, 1, 3)
+		grid.addWidget(self.saveLocLineForm, 4, 2, 1, 2)
+		grid.addWidget(startButton, 4, 4, 1, 1)
 
 		grid.addWidget(self.dataFrame, 5, 1, 4, 4)
 
@@ -113,14 +110,15 @@ class MergeData(QWidget):
 
 	def inputDict(self):
 
-		location = self.locLineForm.text()
+		directory = self.locLineForm.text()
 		head = self.headerLineSB.value() - 1
 		start_data = self.dataLineSB.value() - 1
 		sepDict = {'Tab': '\t', 'Comma': ',', 'Space': ' ', 'Semicolon': ';'}
 		sepSelect = sepDict[self.sepCB.currentText()]
 		index = self.indexLineForm.text()
+		save_file = self.saveLocLineForm.text()
 
-		input_dict = {'location':location, 'head':head, 'start':start_data, 'separator':sepSelect, 'index':index}
+		input_dict = {'dir':directory, 'head':head, 'start':start_data, 'separator':sepSelect, 'index':index, 'save':save_file}
 
 		return input_dict
 
@@ -128,7 +126,7 @@ class MergeData(QWidget):
 	def merge(self):
 
 		input_dict = self.inputDict()
-		files = input_dict['location'] + '*.[Tt][Xx][Tt]'
+		files = input_dict['dir'] + '*.[Tt][Xx][Tt]'
 		txtlist = glob.glob(files)
 
 		dummy = []
@@ -142,6 +140,23 @@ class MergeData(QWidget):
 		merged = pd.concat(dummy, sort=True)
 
 		return merged.sort_index()
+
+
+	def startMerge(self):
+
+		input_dict = self.inputDict()
+		save_file = input_dict['save']
+		merged = self.merge()
+
+		merged.to_csv(save_file, sep='\t')
+
+		if save_file:
+			f = open(save_file, 'r')
+
+			with f:
+				data = f.read()
+				self.dataFrame.setText(data)
+
 
 
 

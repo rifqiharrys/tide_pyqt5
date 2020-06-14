@@ -13,7 +13,6 @@ import os
 
 
 
-
 class MergeData(QWidget):
 
 	def __init__(self):

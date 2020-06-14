@@ -159,5 +159,5 @@ def main():
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
-	entry()
+	main()
 	sys.exit(app.exec_())

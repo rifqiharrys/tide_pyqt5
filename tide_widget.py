@@ -561,11 +561,12 @@ class TideWidget(QWidget):
 
 def main():
 
-	app = QApplication(sys.argv)
+	global tide
 	tide = TideWidget()
 	tide.show()
-	sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
+	app = QApplication(sys.argv)
 	main()
+	sys.exit(app.exec_())

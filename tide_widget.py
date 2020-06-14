@@ -31,7 +31,7 @@ class TideWidget(QWidget):
 
 	def mergeData(self):
 
-		tide_merge.entry()
+		tide_merge.main()
 
 	def initUI(self):
 

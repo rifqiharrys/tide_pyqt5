@@ -150,7 +150,7 @@ class MergeData(QWidget):
 
 
 
-def entry():
+def main():
 
 	global merge
 	merge = MergeData()

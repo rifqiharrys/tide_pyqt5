@@ -31,8 +31,6 @@ class MergeData(QWidget):
 
 		fileLocButton = QPushButton('Open Folder Location')
 		fileLocButton.clicked.connect(self.inputPathDialog)
-		# plotObsButton = QPushButton('Plot Observation Data')
-		# plotObsButton.clicked.connect(self.plotLoad)
 		self.locLineForm = QLineEdit()
 
 		headerLineLabel = QLabel('Header Starting Line:')

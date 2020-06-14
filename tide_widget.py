@@ -122,7 +122,6 @@ class TideWidget(QWidget):
 		self.plotState = QLabel()
 
 
-		# vploadButton = QPushButton('Load Valeport Data')
 		howToButton = QPushButton('How To Use')
 		howToButton.clicked.connect(self.howToDialog)
 		aboutButton = QPushButton('About')

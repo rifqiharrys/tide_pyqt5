@@ -79,10 +79,10 @@ class MergeData(QWidget):
 		grid.addWidget(self.saveLocLineForm, 4, 2, 1, 2)
 		grid.addWidget(startButton, 4, 4, 1, 1)
 
-		grid.addWidget(self.dataFrame, 5, 1, 4, 4)
+		grid.addWidget(self.dataFrame, 5, 1, 95, 4)
 
 		vbox.addStretch(1)
-		grid.addLayout(vbox, 20, 1)
+		grid.addLayout(vbox, 101, 1)
 		self.setLayout(grid)
 
 

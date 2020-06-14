@@ -161,6 +161,4 @@ def entry():
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	entry()
-	# merge = ValeportConvert()
-	# merge.show()
 	sys.exit(app.exec_())

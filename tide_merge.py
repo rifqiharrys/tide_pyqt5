@@ -90,13 +90,7 @@ class MergeData(QWidget):
 
 		home_dir = str(Path.home())
 		fname = QFileDialog.getExistingDirectory(self, 'Load file', home_dir)
-		# folderPath = str(Path(fname))
 		self.locLineForm.setText(fname)
-
-		# fnames = fname[0]
-		# fnames_str = ''
-		# for l in range(len(fnames)):
-		# 	fnames_str += fnames[l] + '\n'
 
 
 	def savePathDialog(self):

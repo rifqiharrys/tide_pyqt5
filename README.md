@@ -24,17 +24,16 @@ In order to use this tide analysis and prediction GUI for python, you need to pr
    - pandas
    - matplotlib
    - PyQt5
-   - PyQt5.sip
    - utide for python
    - ttide for python
    
    To Install the modules listed above (except ttide), type in script below into terminal or cmd or powershell:
    
-        pip install numpy pandas matplotlib PyQt5 PyQt5.sip utide
+        pip install numpy pandas matplotlib PyQt5 utide
 
    or run:
 
-        python -m pip install numpy pandas matplotlib PyQt5 PyQt5.sip utide
+        python -m pip install numpy pandas matplotlib PyQt5 utide
 
    ttide for python doesn't have a pip package installer, so its installation has different steps, which is:
    1. Download ttide for python from https://github.com/moflaher/ttide_py

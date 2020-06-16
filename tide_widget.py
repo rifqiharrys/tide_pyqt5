@@ -230,7 +230,7 @@ class TideWidget(QWidget):
 		raw = raw.iloc[start_data:,0:]
 		raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
 		raw = raw.sort_index()
-		print(raw)
+
 		depth_array = raw[depth].values
 		time_array = raw.index
 
@@ -248,12 +248,14 @@ class TideWidget(QWidget):
 		time_diff = mode(time_diff_list)
 
 		time_array2 = pd.date_range(start=time_array[0], end=time_array[t_length - 1], freq=str(time_diff)+'H')
+		t2_length = len(time_array2)
 
-		raw2 = pd.DataFrame(2, index=time_array2, columns='depth')
+		dummy = pd.DataFrame(np.nan, index=time_array2, columns=list('a'))
 
-		print(raw2)
+		raw2 = pd.concat([raw, dummy], axis=1)
+		depth_array2 = raw2[depth].values
 
-		input_dict = {'depth':depth_array, 'time':time_array, 'interval':time_diff}
+		input_dict = {'depth':depth_array2, 'time':time_array2, 'interval':time_diff}
 
 		return input_dict
 

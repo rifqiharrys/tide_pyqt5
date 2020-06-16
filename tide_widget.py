@@ -364,7 +364,7 @@ class TideWidget(QWidget):
 			save_file = save_file.replace('.txt', text_edit)
 
 			predic_out.index = predic_out['Time']
-			predic_out = predic_out.iloc[:, 0:1]
+			predic_out = predic_out.iloc[:, 1:2]
 			predic_out.to_csv(save_file, sep='\t')
 		else:
 			pass

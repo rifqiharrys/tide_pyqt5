@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 import tide_merge
+from statistics import mode
 
 
 
@@ -233,7 +234,20 @@ class TideWidget(QWidget):
 		depth_array = raw[depth].values
 		time_array = raw.index
 
-		input_dict = {'depth':depth_array, 'time':time_array}
+		time_diff_list = []
+
+		for i in range(len(time_array)):
+			if i < len(time_array) - 1:
+				time_diff = np.timedelta64(time_array[i + 1]-time_array[i], 'm').astype('float64') / 60
+			else:
+				pass
+
+			time_diff_list.append(time_diff)
+
+		time_diff = mode(time_diff_list)
+		print(time_diff)
+
+		input_dict = {'depth':depth_array, 'time':time_array, 'interval':time_diff}
 
 		return input_dict
 
@@ -385,7 +399,7 @@ class TideWidget(QWidget):
 		ad = input_dict1['depth']
 		at = input_dict1['time']
 		latitude = input_dict2['latitude']
-		time_diff = np.timedelta64(at[1]-at[0], 'm').astype('float64') / 60
+		time_diff = input_dict1['interval']
 		time_num = date2num(at.to_pydatetime())
 
 		time_predic = input_dict2['predicted time']

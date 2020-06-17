@@ -247,7 +247,6 @@ class TideWidget(QWidget):
 		time_diff = mode(time_diff_list)
 
 		time_array2 = pd.date_range(start=time_array[0], end=time_array[t_length - 1], freq=str(time_diff)+'H')
-		t2_length = len(time_array2)
 
 		dummy = pd.DataFrame(np.nan, index=time_array2, columns=list('a'))
 

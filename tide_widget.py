@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFi
 							 QPushButton, QCalendarWidget, QDoubleSpinBox, QSpinBox, QCheckBox,
 							 QTableWidget, QScrollArea, QTableWidgetItem, QHeaderView)
 from PyQt5.QtGui import QIcon
-# from tdr_py.vp_tide import v_merge, v_dirmerge
 import pandas as pd
 import numpy as np
 from ttide import t_tide, t_utils

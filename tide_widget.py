@@ -296,7 +296,7 @@ class TideWidget(QWidget):
 		plt.show()
 
 
-	def plotPredic(self, water_level):
+	def plotPredic(self, water_level, msl):
 
 		input_dict2 = self.inputDict2()
 
@@ -306,6 +306,7 @@ class TideWidget(QWidget):
 
 		plt.figure(figsize=(10, 5))
 		plt.plot(at, ad, label=data_label)
+		plt.axhline(msl, color='r', label='MSL = ' + str(msl))
 		plt.xlabel('Time')
 		plt.ylabel('Water Level')
 		plt.legend(loc='best')
@@ -370,9 +371,10 @@ class TideWidget(QWidget):
 		time = input_dict2['predicted time']
 
 		if method == 'T Tide':
-			water_level = prediction
+			water_level = prediction['prediction']
 		elif method == 'U Tide':
-			water_level = prediction['h']
+			p_dict = prediction['prediction']
+			water_level = p_dict['h']
 
 		predic_out = pd.DataFrame({'Time':time, 'Depth':water_level})
 
@@ -389,7 +391,7 @@ class TideWidget(QWidget):
 			pass
 
 		if self.plotState.text() == 'Plot Prediction':
-			self.plotPredic(water_level)
+			self.plotPredic(water_level, prediction['MSL'])
 		else:
 			pass
 
@@ -416,17 +418,16 @@ class TideWidget(QWidget):
 
 	def ttidePredict(self):
 
-		input_dict1 = self.inputDict1()
 		input_dict2 = self.inputDict2()
-		ad = input_dict1['depth']
 
 		time_predic = input_dict2['predicted time']
 		time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = self.ttideAnalyse()
-		predic = coef(time_predic_num) + np.nanmean(ad)
+		msl = coef['z0']
+		predic = coef(time_predic_num) + msl
 
-		return predic
+		return {'prediction':predic, 'MSL':msl}
 
 
 	def utideAnalyse(self):
@@ -439,7 +440,7 @@ class TideWidget(QWidget):
 		time_num = date2num(at.to_pydatetime())
 		latitude = input_dict2['latitude']
 
-		coef = solve(time_num, ad, lat=latitude)
+		coef = solve(time_num, ad, lat=latitude, trend=False)
 
 		return coef
 
@@ -452,9 +453,10 @@ class TideWidget(QWidget):
 		time_predic_num = date2num(time_predic.to_pydatetime())
 
 		coef = self.utideAnalyse()
+		msl = coef.mean
 		predic = reconstruct(time_predic_num, coef, min_SNR=0)
 
-		return predic
+		return {'prediction':predic, 'MSL':msl}
 
 
 	def zeroWarning(self):

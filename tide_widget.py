@@ -237,23 +237,27 @@ class TideWidget(QWidget):
 		t_length = len(time_array)
 		for i in range(t_length):
 			if i < t_length - 1:
-				time_diff_1 = np.timedelta64(time_array[i + 1]-time_array[i], 'm').astype('float64')
+				time_diff_1 = time_array[i + 1]-time_array[i]
 			else:
 				pass
 
 			time_diff_list.append(time_diff_1)
 
 		time_diff = mode(time_diff_list)
+		time_diff_float = np.timedelta64(time_diff, 'm').astype('float64')
 
 		raw_dummy = []
 
 		for i in range(t_length):
 			if i < t_length - 1:
-				time_diff_2 = np.timedelta64(time_array[i + 1]-time_array[i], 'm').astype('float64')
+				time_diff_2 = time_array[i + 1]-time_array[i]
 				if time_diff_2 > time_diff:
-					time_add = pd.date_range(start=time_array[i], end=time_array[i + 1], freq=str(time_diff)+'min')
-					nan_add = pd.DataFrame({time:time_add, 
-											depth:pd.Series(np.nan, index=list(range(len(time_add))))})
+					if time_diff_2 % time_diff / time_diff == 0:
+						time_add = pd.date_range(start=time_array[i] + time_diff, end=time_array[i + 1] - time_diff, freq=time_diff)
+					else:
+						time_add = pd.date_range(start=time_array[i] + time_diff, end=time_array[i + 1], freq=time_diff)
+
+					nan_add = pd.DataFrame({time:time_add, depth:pd.Series(np.nan, index=list(range(len(time_add))))})
 					nan_add.index = nan_add[time]
 					nan_add = nan_add.iloc[:, 1:]
 					raw_dummy.append(nan_add)
@@ -268,7 +272,7 @@ class TideWidget(QWidget):
 		time_array2 = filled.index
 		depth_array2 = filled[depth].values
 
-		input_dict = {'depth':depth_array2, 'time':time_array2, 'interval':time_diff}
+		input_dict = {'depth':depth_array2, 'time':time_array2, 'interval':time_diff_float}
 
 		return input_dict
 

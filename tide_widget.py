@@ -425,8 +425,6 @@ class TideWidget(QWidget):
 		time_diff = input_dict1['interval'] / 60
 		time_num = date2num(at.to_pydatetime())
 
-		# time_predic = input_dict2['predicted time']
-
 		coef = t_tide(ad, dt=time_diff, stime=time_num[0], lat=latitude, synth=0)
 
 		return coef

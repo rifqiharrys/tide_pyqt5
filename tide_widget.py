@@ -252,12 +252,10 @@ class TideWidget(QWidget):
 				time_diff_2 = np.timedelta64(time_array[i + 1]-time_array[i], 'm').astype('float64')
 				if time_diff_2 > time_diff:
 					time_add = pd.date_range(start=time_array[i], end=time_array[i + 1], freq=str(time_diff)+'min')
-					print(len(time_add))
 					nan_add = pd.DataFrame({time:time_add, 
 											depth:pd.Series(np.nan, index=list(range(len(time_add))))})
 					nan_add.index = nan_add[time]
 					nan_add = nan_add.iloc[:, 1:]
-					print(nan_add)
 					raw_dummy.append(nan_add)
 				else:
 					pass

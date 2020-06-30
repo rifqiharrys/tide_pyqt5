@@ -18,6 +18,7 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 import tide_merge
 from statistics import mode
+import glob
 
 
 
@@ -42,7 +43,7 @@ class TideWidget(QWidget):
         loadFilesButton = QPushButton('Load File(s)')
         loadFilesButton.clicked.connect(self.loadFilesDialog)
         loadFolderButton = QPushButton('Load Folder')
-        # loadFolderButton.clicked.connect(self.loadFolderDialog)
+        loadFolderButton.clicked.connect(self.loadFolderDialog)
 
         mergeButton = QPushButton('Merge Data')
         mergeButton.clicked.connect(self.mergeData)
@@ -205,8 +206,8 @@ class TideWidget(QWidget):
         locLabel = QLabel('Location:')
         self.locList = QTextBrowser()
 
-        closeButton = QPushButton('Close')
-        closeButton.clicked.connect(loadData.close)
+        cancelButton = QPushButton('Cancel')
+        cancelButton.clicked.connect(loadData.close)
         loadButton = QPushButton('Load')
         loadButton.clicked.connect(self.loadAction)
         loadButton.clicked.connect(loadData.close)
@@ -226,24 +227,70 @@ class TideWidget(QWidget):
         grid.addWidget(self.locList, 4, 1, 10, 6)
 
         grid.addWidget(loadButton, 15, 3, 1, 1)
-        grid.addWidget(closeButton, 15, 4, 1, 1)
+        grid.addWidget(cancelButton, 15, 4, 1, 1)
 
         loadData.setLayout(grid)
 
         loadData.exec_()
 
 
-    def folderDialog(self):
+    def loadFolderDialog(self):
 
-        home_dir = str(Path.home())
-        fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
-        self.locList.setText(fname)
+        loadData = QDialog()
+        loadData.setWindowTitle('Load Data')
+        loadData.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+
+        openFolderButton = QPushButton('Open Folder')
+        openFolderButton.clicked.connect(self.folderDialog)
+
+        sepLabel = QLabel('Separator:')
+        self.sepCB = QComboBox()
+        self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+
+        headerLineLabel = QLabel('Header Starting Line:')
+        self.headerLineSB = QSpinBox()
+        self.headerLineSB.setMinimum(1)
+
+        dataLineLabel = QLabel('Data Starting Line:')
+        self.dataLineSB = QSpinBox()
+        self.dataLineSB.setMinimum(1)
+
+        locLabel = QLabel('Location:')
+        self.locList = QTextBrowser()
+
+        cancelButton = QPushButton('Cancel')
+        cancelButton.clicked.connect(loadData.close)
+        loadButton = QPushButton('Load')
+        loadButton.clicked.connect(self.loadAction)
+        loadButton.clicked.connect(loadData.close)
+
+        grid = QGridLayout()
+        grid.addWidget(openFolderButton, 1, 1, 1, 6)
+
+        grid.addWidget(sepLabel, 2, 1, 1, 1)
+        grid.addWidget(self.sepCB, 2, 2, 1, 1)
+        grid.addWidget(headerLineLabel, 2, 3, 1, 1)
+        grid.addWidget(self.headerLineSB, 2, 4, 1, 1)
+        grid.addWidget(dataLineLabel, 2, 5, 1, 1)
+        grid.addWidget(self.dataLineSB, 2, 6, 1, 1)
+
+        grid.addWidget(locLabel, 3, 1, 1, 1)
+
+        grid.addWidget(self.locList, 4, 1, 10, 6)
+
+        grid.addWidget(loadButton, 15, 3, 1, 1)
+        grid.addWidget(cancelButton, 15, 4, 1, 1)
+
+        loadData.setLayout(grid)
+
+        loadData.exec_()
 
 
     def filesDialog(self):
 
         home_dir = str(Path.home())
         fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir)
+
         global filesList
         filesList = fname[0]
 
@@ -253,6 +300,18 @@ class TideWidget(QWidget):
             fileListPrint += file + '\n'
 
         self.locList.setText(fileListPrint)
+
+
+    def folderDialog(self):
+
+        home_dir = str(Path.home())
+        fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
+        self.locList.setText(fname)
+
+        pathName = fname + '/**/*.[Tt][Xx][Tt]'
+
+        global filesList
+        filesList = glob.glob(pathName, recursive=True)
 
 
     def loadDataDict(self):

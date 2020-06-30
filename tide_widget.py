@@ -60,11 +60,6 @@ class TideWidget(QWidget):
         self.dayFirstCB = QComboBox()
         self.dayFirstCB.addItems(['True', 'False'])
 
-        sepLabel = QLabel('Separator:')
-        self.sepCB = QComboBox()
-        self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
-
-        self.dataFrame = QTextBrowser()
         self.table = QTableWidget()
         scroll = QScrollArea()
         scroll.setWidget(self.table)
@@ -141,8 +136,6 @@ class TideWidget(QWidget):
 
         grid.addWidget(dayFirstLabel, 4, 1, 1, 1)
         grid.addWidget(self.dayFirstCB, 4, 2, 1, 1)
-        grid.addWidget(sepLabel, 4, 3, 1, 1)
-        grid.addWidget(self.sepCB, 4, 4, 1, 1)
 
         grid.addWidget(self.table, 5, 1, 4, 4)
 
@@ -206,6 +199,11 @@ class TideWidget(QWidget):
         locLabel = QLabel('Location:')
         self.locList = QTextBrowser()
 
+        self.showCheckBox = QCheckBox('Show All Data to Table')
+        self.showCheckBox.setChecked(False)
+        self.showCheckBox.toggled.connect(self.showCheckBoxState)
+        self.showState = QLabel()
+
         cancelButton = QPushButton('Cancel')
         cancelButton.clicked.connect(loadData.close)
         loadButton = QPushButton('Load')
@@ -226,8 +224,9 @@ class TideWidget(QWidget):
 
         grid.addWidget(self.locList, 4, 1, 10, 6)
 
-        grid.addWidget(loadButton, 15, 3, 1, 1)
-        grid.addWidget(cancelButton, 15, 4, 1, 1)
+        grid.addWidget(self.showCheckBox, 15, 1, 1, 4)
+        grid.addWidget(loadButton, 15, 5, 1, 1)
+        grid.addWidget(cancelButton, 15, 6, 1, 1)
 
         loadData.setLayout(grid)
 
@@ -258,6 +257,11 @@ class TideWidget(QWidget):
         locLabel = QLabel('Location:')
         self.locList = QTextBrowser()
 
+        self.showCheckBox = QCheckBox('Show All Data to Table')
+        self.showCheckBox.setChecked(False)
+        self.showCheckBox.toggled.connect(self.showCheckBoxState)
+        self.showState = QLabel()
+
         cancelButton = QPushButton('Cancel')
         cancelButton.clicked.connect(loadData.close)
         loadButton = QPushButton('Load')
@@ -278,12 +282,21 @@ class TideWidget(QWidget):
 
         grid.addWidget(self.locList, 4, 1, 10, 6)
 
-        grid.addWidget(loadButton, 15, 3, 1, 1)
-        grid.addWidget(cancelButton, 15, 4, 1, 1)
+        grid.addWidget(self.showCheckBox, 15, 1, 1, 4)
+        grid.addWidget(loadButton, 15, 5, 1, 1)
+        grid.addWidget(cancelButton, 15, 6, 1, 1)
 
         loadData.setLayout(grid)
 
         loadData.exec_()
+
+
+    def showCheckBoxState(self):
+
+        if self.showCheckBox.isChecked() == True:
+            self.showState.setText(self.showCheckBox.text())
+        else:
+            self.showState.setText('unchecked')
 
 
     def filesDialog(self):
@@ -306,12 +319,19 @@ class TideWidget(QWidget):
 
         home_dir = str(Path.home())
         fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
-        self.locList.setText(fname)
+        # self.locList.setText(fname)
 
         pathName = fname + '/**/*.[Tt][Xx][Tt]'
 
         global filesList
         filesList = glob.glob(pathName, recursive=True)
+
+        fileListPrint = ''
+
+        for file in filesList:
+            fileListPrint += file + '\n'
+
+        self.locList.setText(fileListPrint)
 
 
     def loadDataDict(self):
@@ -337,7 +357,12 @@ class TideWidget(QWidget):
 
     def loadAction(self):
 
-        data = self.loadDataDict()
+        raw = self.loadDataDict()
+
+        if self.showState.text() == 'Show All Data to Table':
+            data = raw
+        else:
+            data = raw.head(100)
 
         self.timeHeaderCB.addItems(data.columns)
         self.depthHeaderCB.addItems(data.columns)

@@ -40,7 +40,7 @@ class TideWidget(QWidget):
         self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
         loadFilesButton = QPushButton('Load File(s)')
-        loadFilesButton.clicked.connect(self.loadDataDialog)
+        loadFilesButton.clicked.connect(self.loadFilesDialog)
         loadFolderButton = QPushButton('Load Folder')
         # loadFolderButton.clicked.connect(self.loadFolderDialog)
 
@@ -179,7 +179,7 @@ class TideWidget(QWidget):
         self.setLayout(grid)
 
 
-    def loadDataDialog(self):
+    def loadFilesDialog(self):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')

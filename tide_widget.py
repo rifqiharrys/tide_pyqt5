@@ -39,27 +39,21 @@ class TideWidget(QWidget):
         self.setWindowTitle('Tide Analysis and Prediction GUI')
         self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
-        fileLocButton = QPushButton('Open File Location')
-        fileLocButton.clicked.connect(self.inputPathDialog)
+        loadFilesButton = QPushButton('Load File(s)')
+        loadFilesButton.clicked.connect(self.loadDataDialog)
+        loadFolderButton = QPushButton('Load Folder')
+        # loadFolderButton.clicked.connect(self.loadFolderDialog)
+
         mergeButton = QPushButton('Merge Data')
         mergeButton.clicked.connect(self.mergeData)
         plotObsButton = QPushButton('Plot Observation Data')
         plotObsButton.clicked.connect(self.plotLoad)
-        self.locLineForm = QLineEdit()
-
-        headerLineLabel = QLabel('Header Starting Line:')
-        self.headerLineSB = QSpinBox()
-        self.headerLineSB.setMinimum(1)
-
-        dataLineLabel = QLabel('Data Starting Line:')
-        self.dataLineSB = QSpinBox()
-        self.dataLineSB.setMinimum(1)
 
         timeHeaderLabel = QLabel('Time Header:')
-        self.timeHeaderLineForm = QLineEdit()
+        self.timeHeaderCB = QComboBox()
 
         depthHeaderLabel = QLabel('Depth Header:')
-        self.depthHeaderLineForm = QLineEdit()
+        self.depthHeaderCB = QComboBox()
 
         dayFirstLabel = QLabel('Day First:')
         self.dayFirstCB = QComboBox()
@@ -70,6 +64,9 @@ class TideWidget(QWidget):
         self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
 
         self.dataFrame = QTextBrowser()
+        self.table = QTableWidget()
+        scroll = QScrollArea()
+        scroll.setWidget(self.table)
 
         self.methodLabel = QLabel()
         self.methodLabel.setAlignment(Qt.AlignRight)
@@ -130,27 +127,23 @@ class TideWidget(QWidget):
         grid = QGridLayout()
         vbox = QVBoxLayout()
         
-        grid.addWidget(fileLocButton, 1, 1, 1, 1)
-        grid.addWidget(self.locLineForm, 1, 2, 1, 1)
-        grid.addWidget(mergeButton, 1, 3, 1, 1)
-        grid.addWidget(plotObsButton, 1, 4, 1, 1)
+        grid.addWidget(loadFilesButton, 1, 1, 1, 2)
+        grid.addWidget(loadFolderButton, 1, 3, 1, 2)
 
-        grid.addWidget(headerLineLabel, 2, 1, 1, 1)
-        grid.addWidget(self.headerLineSB, 2, 2, 1, 1)
-        grid.addWidget(dataLineLabel, 2, 3, 1, 1)
-        grid.addWidget(self.dataLineSB, 2, 4, 1, 1)
+        grid.addWidget(mergeButton, 2, 1, 1, 2)
+        grid.addWidget(plotObsButton, 2, 3, 1, 2)
 
         grid.addWidget(timeHeaderLabel, 3, 1, 1, 1)
-        grid.addWidget(self.timeHeaderLineForm, 3, 2, 1, 1)
+        grid.addWidget(self.timeHeaderCB, 3, 2, 1, 1)
         grid.addWidget(depthHeaderLabel, 3, 3, 1, 1)
-        grid.addWidget(self.depthHeaderLineForm, 3, 4, 1, 1)
+        grid.addWidget(self.depthHeaderCB, 3, 4, 1, 1)
 
         grid.addWidget(dayFirstLabel, 4, 1, 1, 1)
         grid.addWidget(self.dayFirstCB, 4, 2, 1, 1)
         grid.addWidget(sepLabel, 4, 3, 1, 1)
         grid.addWidget(self.sepCB, 4, 4, 1, 1)
 
-        grid.addWidget(self.dataFrame, 5, 1, 4, 4)
+        grid.addWidget(self.table, 5, 1, 4, 4)
 
         grid.addWidget(self.methodLabel, 9, 1, 1, 2)
         grid.addWidget(tideAnalysisLabel, 9, 3, 1, 2)
@@ -186,19 +179,119 @@ class TideWidget(QWidget):
         self.setLayout(grid)
 
 
-    def inputPathDialog(self):
+    def loadDataDialog(self):
+
+        loadData = QDialog()
+        loadData.setWindowTitle('Load Data')
+        loadData.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+
+        openFilesButton = QPushButton('Open File(s)')
+        openFilesButton.clicked.connect(self.filesDialog)
+        openFolderButton = QPushButton('Open Folder')
+        openFolderButton.clicked.connect(self.folderDialog)
+
+        sepLabel = QLabel('Separator:')
+        self.sepCB = QComboBox()
+        self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+
+        headerLineLabel = QLabel('Header Starting Line:')
+        self.headerLineSB = QSpinBox()
+        self.headerLineSB.setMinimum(1)
+
+        dataLineLabel = QLabel('Data Starting Line:')
+        self.dataLineSB = QSpinBox()
+        self.dataLineSB.setMinimum(1)
+
+        locLabel = QLabel('Location:')
+        self.locList = QTextBrowser()
+
+        closeButton = QPushButton('Close')
+        closeButton.clicked.connect(loadData.close)
+        loadButton = QPushButton('Load')
+        loadButton.clicked.connect(self.loadAction)
+        loadButton.clicked.connect(loadData.close)
+
+        grid = QGridLayout()
+        grid.addWidget(openFilesButton, 1, 1, 1, 6)
+
+        grid.addWidget(sepLabel, 2, 1, 1, 1)
+        grid.addWidget(self.sepCB, 2, 2, 1, 1)
+        grid.addWidget(headerLineLabel, 2, 3, 1, 1)
+        grid.addWidget(self.headerLineSB, 2, 4, 1, 1)
+        grid.addWidget(dataLineLabel, 2, 5, 1, 1)
+        grid.addWidget(self.dataLineSB, 2, 6, 1, 1)
+
+        grid.addWidget(locLabel, 3, 1, 1, 1)
+
+        grid.addWidget(self.locList, 4, 1, 10, 6)
+
+        grid.addWidget(loadButton, 15, 3, 1, 1)
+        grid.addWidget(closeButton, 15, 4, 1, 1)
+
+        loadData.setLayout(grid)
+
+        loadData.exec_()
+
+
+    def folderDialog(self):
 
         home_dir = str(Path.home())
-        fname = QFileDialog.getOpenFileName(self, 'Load file', home_dir)
-        filePath = str(Path(fname[0]))
-        self.locLineForm.setText(filePath)
+        fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
+        self.locList.setText(fname)
 
-        if fname[0]:
-            f = open(fname[0], 'r')
 
-            with f:
-                data = f.read()
-                self.dataFrame.setText(data)
+    def filesDialog(self):
+
+        home_dir = str(Path.home())
+        fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir)
+        global filesList
+        filesList = fname[0]
+
+        fileListPrint = ''
+
+        for file in filesList:
+            fileListPrint += file + '\n'
+
+        self.locList.setText(fileListPrint)
+
+
+    def loadDataDict(self):
+
+        head = self.headerLineSB.value() - 1
+        start_data = self.dataLineSB.value() - 1
+        sepDict = {'Tab': '\t', 'Comma': ',', 'Space': ' ', 'Semicolon': ';'}
+        sepSelect = sepDict[self.sepCB.currentText()]
+
+        dummy = []
+
+        for file in filesList:
+            raw = pd.read_csv(file, sep=sepSelect, header=head)
+            raw = raw.iloc[start_data:, 0:]
+
+            dummy.append(raw)
+
+        global merged
+        merged = pd.concat(dummy, ignore_index=True, sort=False)
+
+        return merged
+
+
+    def loadAction(self):
+
+        data = self.loadDataDict()
+
+        self.timeHeaderCB.addItems(data.columns)
+        self.depthHeaderCB.addItems(data.columns)
+
+        self.table.setColumnCount(len(data.columns))
+        self.table.setRowCount(len(data.index))
+
+        for h in range(len(data.columns)):
+            self.table.setHorizontalHeaderItem(h, QTableWidgetItem(data.columns[h]))
+
+        for i in range(len(data.index)):
+            for j in range(len(data.columns)):
+                self.table.setItem(i, j, QTableWidgetItem(str(data.iloc[i, j])))
 
 
     def savePathDialog(self):
@@ -216,21 +309,17 @@ class TideWidget(QWidget):
 
     def inputDict1(self):
 
-        location = self.locLineForm.text()
-        head = self.headerLineSB.value() - 1
-        start_data = self.dataLineSB.value() - 1
-        time = self.timeHeaderLineForm.text()
-        depth = self.depthHeaderLineForm.text()
+        data = merged
+
+        time = self.timeHeaderCB.currentText()
+        depth = self.depthHeaderCB.currentText()
         dayF = self.str2bool(self.dayFirstCB.currentText())
-        sepDict = {'Tab':'\t', 'Comma':',', 'Space':' ', 'Semicolon':';'}
-        sepSelect = sepDict[self.sepCB.currentText()]
 
-        raw = pd.read_csv(location, sep=sepSelect, index_col=time, header=head)
-        raw = raw.iloc[start_data:,0:]
-        raw.index = pd.to_datetime(raw.index, dayfirst=dayF)
-        raw = raw.sort_index()
+        data[time] = pd.to_datetime(data[time], dayfirst=dayF)
+        data.index = data[time]
+        data = data.sort_index()
 
-        time_array = raw.index
+        time_array = data.index
 
         time_diff_list = []
 
@@ -246,7 +335,7 @@ class TideWidget(QWidget):
         time_diff = mode(time_diff_list)
         time_diff_float = np.timedelta64(time_diff, 'm').astype('float64')
 
-        raw_dummy = []
+        data_dummy = []
 
         for i in range(t_length):
             if i < t_length - 1:
@@ -260,14 +349,14 @@ class TideWidget(QWidget):
                     nan_add = pd.DataFrame({time:time_add, depth:pd.Series(np.nan, index=list(range(len(time_add))))})
                     nan_add.index = nan_add[time]
                     nan_add = nan_add.iloc[:, 1:]
-                    raw_dummy.append(nan_add)
+                    data_dummy.append(nan_add)
                 else:
                     pass
             else:
                 pass
 
-        raw_add = pd.concat(raw_dummy, sort=True)
-        filled = pd.concat([raw, raw_add], sort=True)
+        data_add = pd.concat(data_dummy, sort=True)
+        filled = pd.concat([data, data_add], sort=True)
         filled = filled.sort_index()
         time_array2 = filled.index
         depth_array2 = filled[depth].values
@@ -493,7 +582,7 @@ class TideWidget(QWidget):
         showPredic.setWindowTitle('Tide Prediction')
         showPredic.setWindowIcon(QIcon('wave-pngrepo-com.png'))
         showPredic.resize(320, 720)
-        closeButton = QPushButton("Close")
+        closeButton = QPushButton('Close')
         closeButton.clicked.connect(showPredic.close)
 
         table = QTableWidget()
@@ -525,7 +614,7 @@ class TideWidget(QWidget):
         howTo = QDialog()
         howTo.setWindowTitle('How to Use')
         howTo.setWindowIcon(QIcon('wave-pngrepo-com.png'))
-        closeButton = QPushButton("Close")
+        closeButton = QPushButton('Close')
         closeButton.clicked.connect(howTo.close)
 
         how_to_use = open('how_to_use.txt', 'r')
@@ -547,7 +636,7 @@ class TideWidget(QWidget):
         about = QDialog()
         about.setWindowTitle('About')
         about.setWindowIcon(QIcon('wave-pngrepo-com.png'))
-        closeButton = QPushButton("Close")
+        closeButton = QPushButton('Close')
         closeButton.clicked.connect(about.close)
 
         aboutText = '''<body>

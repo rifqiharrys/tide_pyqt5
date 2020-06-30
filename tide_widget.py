@@ -177,7 +177,7 @@ class TideWidget(QWidget):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
-        loadData.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        loadData.setWindowIcon(QIcon('load-pngrepo-com.png'))
 
         openFilesButton = QPushButton('Open File(s)')
         openFilesButton.clicked.connect(self.filesDialog)
@@ -237,7 +237,7 @@ class TideWidget(QWidget):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
-        loadData.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        loadData.setWindowIcon(QIcon('load-pngrepo-com.png'))
 
         openFolderButton = QPushButton('Open Folder')
         openFolderButton.clicked.connect(self.folderDialog)

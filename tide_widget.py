@@ -249,7 +249,9 @@ class TideWidget(QWidget):
     def filesDialog(self):
 
         home_dir = str(Path.home())
-        fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir)
+        fileFilter = 'Text Files (*.txt *.csv *.dat)'
+        # fDialog.selectNameFilter('Text Files (*.txt *.csv *.dat)')
+        fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir, fileFilter)
 
         global filesList
         filesList = fname[0]

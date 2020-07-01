@@ -31,12 +31,9 @@ class MergeData(QWidget):
         loadFilesButton = QPushButton('Load Data')
         loadFilesButton.clicked.connect(self.loadDataDialog)
 
-        indexLabel = QLabel('Index Name:')
-        self.indexCB = QComboBox()
-
         sepOutLabel = QLabel('Output Separator:')
         self.sepOutCB = QComboBox()
-        self.sepOutCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+        self.sepOutCB.addItems(['Tab', 'Comma', 'Semicolon'])
 
         saveLocButton = QPushButton('Save File Location')
         saveLocButton.clicked.connect(self.savePathDialog)
@@ -55,17 +52,14 @@ class MergeData(QWidget):
         vbox = QVBoxLayout()
 
         grid.addWidget(loadFilesButton, 1, 1, 1, 2)
-        grid.addWidget(indexLabel, 1, 3, 1, 1)
-        grid.addWidget(self.indexCB, 1, 4, 1, 1)
+        grid.addWidget(sepOutLabel, 1, 3, 1, 1)
+        grid.addWidget(self.sepOutCB, 1, 4, 1, 1)
 
         grid.addWidget(saveLocButton, 2, 1, 1, 1)
         grid.addWidget(self.saveLocLineForm, 2, 2, 1, 2)
         grid.addWidget(startButton, 2, 4, 1, 1)
 
-        grid.addWidget(sepOutLabel, 3, 1, 1, 1)
-        grid.addWidget(self.sepOutCB, 3, 2, 1, 1)
-
-        grid.addWidget(self.table, 4, 1, 96, 4)
+        grid.addWidget(self.table, 3, 1, 97, 4)
 
         vbox.addStretch(1)
         grid.addLayout(vbox, 101, 1)
@@ -210,9 +204,6 @@ class MergeData(QWidget):
         else:
             data = raw.head(100)
 
-        self.indexCB.clear()
-        self.indexCB.addItems(data.columns)
-
         self.table.setColumnCount(len(data.columns))
         self.table.setRowCount(len(data.index))
 
@@ -238,7 +229,7 @@ class MergeData(QWidget):
     def startMerge(self):
 
         save_file = self.saveLocLineForm.text()
-        sepOutDict = {'Tab': '\t', 'Comma': ',', 'Space': ' ', 'Semicolon': ';'}
+        sepOutDict = {'Tab': '\t', 'Comma': ',', 'Semicolon': ';'}
         sepOutSelect = sepOutDict[self.sepOutCB.currentText()]
         data = merged
 

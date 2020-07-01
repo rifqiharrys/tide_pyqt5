@@ -48,6 +48,9 @@ class MergeData(QWidget):
 
         self.dataFrame = QTextBrowser()
 
+        closeButton = QPushButton('Close')
+        closeButton.clicked.connect(self.close)
+
         grid = QGridLayout()
         vbox = QVBoxLayout()
 
@@ -63,6 +66,7 @@ class MergeData(QWidget):
 
         vbox.addStretch(1)
         grid.addLayout(vbox, 101, 1)
+        grid.addWidget(closeButton, 102, 4, 1, 1)
         self.setLayout(grid)
 
     def loadDataDialog(self):

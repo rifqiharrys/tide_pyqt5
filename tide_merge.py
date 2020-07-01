@@ -23,7 +23,6 @@ class MergeData(QWidget):
 
     def initUI(self):
 
-        # self.setGeometry(300, 100, 480, 640)
         self.resize(480, 640)
         self.setWindowTitle('Merge Data GUI')
         self.setWindowIcon(QIcon('wave-pngrepo-com.png'))

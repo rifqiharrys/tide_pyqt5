@@ -235,40 +235,6 @@ class MergeData(QWidget):
         self.saveLocLineForm.setText(filePath)
 
 
-    def inputDict(self):
-
-        directory = self.locLineForm.text()
-        head = self.headerLineSB.value() - 1
-        start_data = self.dataLineSB.value() - 1
-        sepDict = {'Tab': '\t', 'Comma': ',', 'Space': ' ', 'Semicolon': ';'}
-        sepSelect = sepDict[self.sepCB.currentText()]
-        index = self.indexLineForm.text()
-        save_file = self.saveLocLineForm.text()
-
-        input_dict = {'dir':directory, 'head':head, 'start':start_data, 'separator':sepSelect, 'index':index, 'save':save_file}
-
-        return input_dict
-
-
-    def merge(self):
-
-        input_dict = self.inputDict()
-        files = input_dict['dir'] + '/**/*.[Tt][Xx][Tt]'
-        txtlist = glob.glob(files, recursive=True)
-
-        dummy = []
-
-        for txt in txtlist:
-            raw = pd.read_csv(txt, sep=input_dict['separator'], header=input_dict['head'], index_col=input_dict['index'])
-            raw = raw.iloc[input_dict['start']:, 0:]
-
-            dummy.append(raw)
-        
-        merged = pd.concat(dummy, sort=True)
-
-        return merged.sort_index()
-
-
     def startMerge(self):
 
         save_file = self.saveLocLineForm.text()
@@ -276,15 +242,7 @@ class MergeData(QWidget):
         sepOutSelect = sepOutDict[self.sepOutCB.currentText()]
         data = merged
 
-        data.to_csv(save_file, sep=sepOutSelect)
-
-        # if save_file:
-        #     f = open(save_file, 'r')
-
-        #     with f:
-        #         data = f.read()
-        #         self.dataFrame.setText(data)
-
+        data.to_csv(save_file, sep=sepOutSelect, index=False)
 
 
 

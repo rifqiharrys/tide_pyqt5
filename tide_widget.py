@@ -653,7 +653,7 @@ class TideWidget(QWidget):
 
         howTo = QDialog()
         howTo.setWindowTitle('How to Use')
-        howTo.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        howTo.setWindowIcon(QIcon('question-pngrepo-com.png'))
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(howTo.close)
 
@@ -675,7 +675,7 @@ class TideWidget(QWidget):
 
         about = QDialog()
         about.setWindowTitle('About')
-        about.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        about.setWindowIcon(QIcon('information-pngrepo-com.png'))
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(about.close)
 

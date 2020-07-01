@@ -41,6 +41,7 @@ class MergeData(QWidget):
 
         startButton =  QPushButton('Start Merge')
         startButton.clicked.connect(self.startMerge)
+        startButton.clicked.connect(self.close)
 
         self.table = QTableWidget()
         scroll = QScrollArea()

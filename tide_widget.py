@@ -34,16 +34,15 @@ class TideWidget(QWidget):
 
         tide_merge.main()
 
+
     def initUI(self):
 
         self.setGeometry(300, 100, 480, 640)
         self.setWindowTitle('Tide Analysis and Prediction GUI')
         self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
-        loadFilesButton = QPushButton('Load File(s)')
-        loadFilesButton.clicked.connect(self.loadFilesDialog)
-        loadFolderButton = QPushButton('Load Folder')
-        loadFolderButton.clicked.connect(self.loadFolderDialog)
+        loadFilesButton = QPushButton('Load Data')
+        loadFilesButton.clicked.connect(self.loadDataDialog)
 
         mergeButton = QPushButton('Merge Data')
         mergeButton.clicked.connect(self.mergeData)
@@ -124,9 +123,10 @@ class TideWidget(QWidget):
         vbox = QVBoxLayout()
         
         grid.addWidget(loadFilesButton, 1, 1, 1, 2)
-        grid.addWidget(loadFolderButton, 1, 3, 1, 2)
+        grid.addWidget(mergeButton, 1, 3, 1, 2)
 
-        grid.addWidget(mergeButton, 2, 1, 1, 2)
+        grid.addWidget(dayFirstLabel, 2, 1, 1, 1)
+        grid.addWidget(self.dayFirstCB, 2, 2, 1, 1)
         grid.addWidget(plotObsButton, 2, 3, 1, 2)
 
         grid.addWidget(timeHeaderLabel, 3, 1, 1, 1)
@@ -134,10 +134,7 @@ class TideWidget(QWidget):
         grid.addWidget(depthHeaderLabel, 3, 3, 1, 1)
         grid.addWidget(self.depthHeaderCB, 3, 4, 1, 1)
 
-        grid.addWidget(dayFirstLabel, 4, 1, 1, 1)
-        grid.addWidget(self.dayFirstCB, 4, 2, 1, 1)
-
-        grid.addWidget(self.table, 5, 1, 4, 4)
+        grid.addWidget(self.table, 4, 1, 5, 4)
 
         grid.addWidget(self.methodLabel, 9, 1, 1, 2)
         grid.addWidget(tideAnalysisLabel, 9, 3, 1, 2)
@@ -173,7 +170,7 @@ class TideWidget(QWidget):
         self.setLayout(grid)
 
 
-    def loadFilesDialog(self):
+    def loadDataDialog(self):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
@@ -188,63 +185,9 @@ class TideWidget(QWidget):
         self.sepCB = QComboBox()
         self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
 
-        headerLineLabel = QLabel('Header Starting Line:')
-        self.headerLineSB = QSpinBox()
-        self.headerLineSB.setMinimum(1)
-
-        dataLineLabel = QLabel('Data Starting Line:')
-        self.dataLineSB = QSpinBox()
-        self.dataLineSB.setMinimum(1)
-
-        locLabel = QLabel('Location:')
-        self.locList = QTextBrowser()
-
-        self.showCheckBox = QCheckBox('Show All Data to Table')
-        self.showCheckBox.setChecked(False)
-        self.showCheckBox.toggled.connect(self.showCheckBoxState)
-        self.showState = QLabel()
-
-        cancelButton = QPushButton('Cancel')
-        cancelButton.clicked.connect(loadData.close)
-        loadButton = QPushButton('Load')
-        loadButton.clicked.connect(self.loadAction)
-        loadButton.clicked.connect(loadData.close)
-
-        grid = QGridLayout()
-        grid.addWidget(openFilesButton, 1, 1, 1, 6)
-
-        grid.addWidget(sepLabel, 2, 1, 1, 1)
-        grid.addWidget(self.sepCB, 2, 2, 1, 1)
-        grid.addWidget(headerLineLabel, 2, 3, 1, 1)
-        grid.addWidget(self.headerLineSB, 2, 4, 1, 1)
-        grid.addWidget(dataLineLabel, 2, 5, 1, 1)
-        grid.addWidget(self.dataLineSB, 2, 6, 1, 1)
-
-        grid.addWidget(locLabel, 3, 1, 1, 1)
-
-        grid.addWidget(self.locList, 4, 1, 10, 6)
-
-        grid.addWidget(self.showCheckBox, 15, 1, 1, 4)
-        grid.addWidget(loadButton, 15, 5, 1, 1)
-        grid.addWidget(cancelButton, 15, 6, 1, 1)
-
-        loadData.setLayout(grid)
-
-        loadData.exec_()
-
-
-    def loadFolderDialog(self):
-
-        loadData = QDialog()
-        loadData.setWindowTitle('Load Data')
-        loadData.setWindowIcon(QIcon('load-pngrepo-com.png'))
-
-        openFolderButton = QPushButton('Open Folder')
-        openFolderButton.clicked.connect(self.folderDialog)
-
-        sepLabel = QLabel('Separator:')
-        self.sepCB = QComboBox()
-        self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+        textTypeLabel = QLabel('Text Type')
+        self.textTypeCB = QComboBox()
+        self.textTypeCB.addItems(['.txt', '.csv', '.dat'])
 
         headerLineLabel = QLabel('Header Starting Line:')
         self.headerLineSB = QSpinBox()
@@ -269,22 +212,26 @@ class TideWidget(QWidget):
         loadButton.clicked.connect(loadData.close)
 
         grid = QGridLayout()
-        grid.addWidget(openFolderButton, 1, 1, 1, 6)
+        grid.addWidget(openFilesButton, 1, 1, 1, 2)
+        grid.addWidget(openFolderButton, 1, 3, 1, 2)
 
         grid.addWidget(sepLabel, 2, 1, 1, 1)
         grid.addWidget(self.sepCB, 2, 2, 1, 1)
-        grid.addWidget(headerLineLabel, 2, 3, 1, 1)
-        grid.addWidget(self.headerLineSB, 2, 4, 1, 1)
-        grid.addWidget(dataLineLabel, 2, 5, 1, 1)
-        grid.addWidget(self.dataLineSB, 2, 6, 1, 1)
+        grid.addWidget(textTypeLabel, 2, 3, 1, 1)
+        grid.addWidget(self.textTypeCB, 2, 4, 1, 1)
 
-        grid.addWidget(locLabel, 3, 1, 1, 1)
+        grid.addWidget(headerLineLabel, 3, 1, 1, 1)
+        grid.addWidget(self.headerLineSB, 3, 2, 1, 1)
+        grid.addWidget(dataLineLabel, 3, 3, 1, 1)
+        grid.addWidget(self.dataLineSB, 3, 4, 1, 1)
 
-        grid.addWidget(self.locList, 4, 1, 10, 6)
+        grid.addWidget(locLabel, 4, 1, 1, 1)
 
-        grid.addWidget(self.showCheckBox, 15, 1, 1, 4)
-        grid.addWidget(loadButton, 15, 5, 1, 1)
-        grid.addWidget(cancelButton, 15, 6, 1, 1)
+        grid.addWidget(self.locList, 5, 1, 10, 4)
+
+        grid.addWidget(self.showCheckBox, 15, 1, 1, 2)
+        grid.addWidget(loadButton, 15, 3, 1, 1)
+        grid.addWidget(cancelButton, 15, 4, 1, 1)
 
         loadData.setLayout(grid)
 
@@ -319,9 +266,11 @@ class TideWidget(QWidget):
 
         home_dir = str(Path.home())
         fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
-        # self.locList.setText(fname)
 
-        pathName = fname + '/**/*.[Tt][Xx][Tt]'
+        textTypeDict = {'.txt': '.[Tt][Xx][Tt]', '.csv': '.[Cc][Ss][Vv]', '.dat': '.[Dd][Aa][Tt]'}
+        textTypeSelect = textTypeDict[self.textTypeCB.currentText()]
+
+        pathName = fname + '/**/*' + textTypeSelect
 
         global filesList
         filesList = glob.glob(pathName, recursive=True)
@@ -376,6 +325,9 @@ class TideWidget(QWidget):
         for i in range(len(data.index)):
             for j in range(len(data.columns)):
                 self.table.setItem(i, j, QTableWidgetItem(str(data.iloc[i, j])))
+
+        self.table.resizeRowsToContents()
+        self.table.resizeColumnsToContents()
 
 
     def savePathDialog(self):

@@ -3,9 +3,9 @@
 import sys
 from pathlib import Path
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QWidget, QTextBrowser, QLineEdit, QFileDialog, QDialog,
+from PyQt5.QtWidgets import (QApplication, QWidget, QTableWidget, QLineEdit, QFileDialog, QDialog,
                              QGridLayout, QMessageBox, QVBoxLayout, QComboBox, QLabel, QPushButton,
-                             QDoubleSpinBox, QSpinBox)
+                             QTableWidgetItem, QSpinBox, QScrollArea, QCheckBox, QTextBrowser)
 from PyQt5.QtGui import QIcon
 import pandas as pd
 import glob
@@ -28,9 +28,67 @@ class MergeData(QWidget):
         self.setWindowTitle('Merge Data GUI')
         self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
 
-        fileLocButton = QPushButton('Open Folder Location')
-        fileLocButton.clicked.connect(self.inputPathDialog)
-        self.locLineForm = QLineEdit()
+        loadFilesButton = QPushButton('Load Data')
+        loadFilesButton.clicked.connect(self.loadDataDialog)
+
+        indexLabel = QLabel('Index Name:')
+        self.indexCB = QComboBox()
+
+        sepOutLabel = QLabel('Output Separator:')
+        self.sepOutCB = QComboBox()
+        self.sepOutCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+
+        saveLocButton = QPushButton('Save File Location')
+        saveLocButton.clicked.connect(self.savePathDialog)
+        self.saveLocLineForm = QLineEdit()
+
+        startButton =  QPushButton('Start Merge')
+        startButton.clicked.connect(self.startMerge)
+
+        self.table = QTableWidget()
+        scroll = QScrollArea()
+        scroll.setWidget(self.table)
+
+        self.dataFrame = QTextBrowser()
+
+        grid = QGridLayout()
+        vbox = QVBoxLayout()
+
+        grid.addWidget(loadFilesButton, 1, 1, 1, 2)
+        grid.addWidget(indexLabel, 1, 3, 1, 1)
+        grid.addWidget(self.indexCB, 1, 4, 1, 1)
+
+        grid.addWidget(saveLocButton, 2, 1, 1, 1)
+        grid.addWidget(self.saveLocLineForm, 2, 2, 1, 2)
+        grid.addWidget(startButton, 2, 4, 1, 1)
+
+        grid.addWidget(sepOutLabel, 3, 1, 1, 1)
+        grid.addWidget(self.sepOutCB, 3, 2, 1, 1)
+
+        grid.addWidget(self.table, 4, 1, 96, 4)
+
+        vbox.addStretch(1)
+        grid.addLayout(vbox, 101, 1)
+        self.setLayout(grid)
+
+    def loadDataDialog(self):
+
+        loadData = QDialog()
+        loadData.setWindowTitle('Load Data')
+        loadData.setWindowIcon(QIcon('load-pngrepo-com.png'))
+
+        openFilesButton = QPushButton('Open File(s)')
+        openFilesButton.clicked.connect(self.filesDialog)
+        openFolderButton = QPushButton('Open Folder')
+        openFolderButton.clicked.connect(self.folderDialog)
+
+        sepInLabel = QLabel('Separator:')
+        self.sepInCB = QComboBox()
+        self.sepInCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+
+        textTypeLabel = QLabel('Text Type')
+        self.textTypeCB = QComboBox()
+        self.textTypeCB.addItems(['.txt', '.csv', '.dat'])
 
         headerLineLabel = QLabel('Header Starting Line:')
         self.headerLineSB = QSpinBox()
@@ -40,54 +98,133 @@ class MergeData(QWidget):
         self.dataLineSB = QSpinBox()
         self.dataLineSB.setMinimum(1)
 
-        indexLabel = QLabel('Index Name:')
-        self.indexLineForm = QLineEdit()
+        locLabel = QLabel('Location:')
+        self.locList = QTextBrowser()
 
-        sepLabel = QLabel('Separator:')
-        self.sepCB = QComboBox()
-        self.sepCB.addItems(['Tab', 'Comma', 'Space', 'Semicolon'])
+        self.showCheckBox = QCheckBox('Show All Data to Table')
+        self.showCheckBox.setChecked(False)
+        self.showCheckBox.toggled.connect(self.showCheckBoxState)
+        self.showState = QLabel()
 
-        saveLocButton = QPushButton('Save File Location')
-        saveLocButton.clicked.connect(self.savePathDialog)
-        self.saveLocLineForm = QLineEdit()
-
-        startButton =  QPushButton('Start Merge')
-        startButton.clicked.connect(self.startMerge)
-
-        self.dataFrame = QTextBrowser()
+        cancelButton = QPushButton('Cancel')
+        cancelButton.clicked.connect(loadData.close)
+        loadButton = QPushButton('Load')
+        loadButton.clicked.connect(self.loadAction)
+        loadButton.clicked.connect(loadData.close)
 
         grid = QGridLayout()
-        vbox = QVBoxLayout()
+        grid.addWidget(openFilesButton, 1, 1, 1, 2)
+        grid.addWidget(openFolderButton, 1, 3, 1, 2)
 
-        grid.addWidget(fileLocButton, 1, 1, 1, 1)
-        grid.addWidget(self.locLineForm, 1, 2, 1, 3)
+        grid.addWidget(sepInLabel, 2, 1, 1, 1)
+        grid.addWidget(self.sepInCB, 2, 2, 1, 1)
+        grid.addWidget(textTypeLabel, 2, 3, 1, 1)
+        grid.addWidget(self.textTypeCB, 2, 4, 1, 1)
 
-        grid.addWidget(headerLineLabel, 2, 1, 1, 1)
-        grid.addWidget(self.headerLineSB, 2, 2, 1, 1)
-        grid.addWidget(dataLineLabel, 2, 3, 1, 1)
-        grid.addWidget(self.dataLineSB, 2, 4, 1, 1)
+        grid.addWidget(headerLineLabel, 3, 1, 1, 1)
+        grid.addWidget(self.headerLineSB, 3, 2, 1, 1)
+        grid.addWidget(dataLineLabel, 3, 3, 1, 1)
+        grid.addWidget(self.dataLineSB, 3, 4, 1, 1)
 
-        grid.addWidget(sepLabel, 3, 1, 1, 1)
-        grid.addWidget(self.sepCB, 3, 2, 1, 1)
-        grid.addWidget(indexLabel, 3, 3, 1, 1)
-        grid.addWidget(self.indexLineForm, 3, 4, 1, 1)
+        grid.addWidget(locLabel, 4, 1, 1, 1)
 
-        grid.addWidget(saveLocButton, 4, 1, 1, 1)
-        grid.addWidget(self.saveLocLineForm, 4, 2, 1, 2)
-        grid.addWidget(startButton, 4, 4, 1, 1)
+        grid.addWidget(self.locList, 5, 1, 10, 4)
 
-        grid.addWidget(self.dataFrame, 5, 1, 95, 4)
+        grid.addWidget(self.showCheckBox, 15, 1, 1, 2)
+        grid.addWidget(loadButton, 15, 3, 1, 1)
+        grid.addWidget(cancelButton, 15, 4, 1, 1)
 
-        vbox.addStretch(1)
-        grid.addLayout(vbox, 101, 1)
-        self.setLayout(grid)
+        loadData.setLayout(grid)
 
+        loadData.exec_()
 
-    def inputPathDialog(self):
+    def showCheckBoxState(self):
+
+        if self.showCheckBox.isChecked() == True:
+            self.showState.setText(self.showCheckBox.text())
+        else:
+            self.showState.setText('unchecked')
+
+    def filesDialog(self):
 
         home_dir = str(Path.home())
-        fname = QFileDialog.getExistingDirectory(self, 'Load file', home_dir)
-        self.locLineForm.setText(fname)
+        fileFilter = 'Text Files (*.txt *.csv *.dat)'
+        fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir, fileFilter)
+
+        global filesList
+        filesList = fname[0]
+
+        fileListPrint = ''
+
+        for file in filesList:
+            fileListPrint += file + '\n'
+
+        self.locList.setText(fileListPrint)
+
+    def folderDialog(self):
+
+        home_dir = str(Path.home())
+        fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
+
+        textTypeDict = {'.txt': '.[Tt][Xx][Tt]', '.csv': '.[Cc][Ss][Vv]', '.dat': '.[Dd][Aa][Tt]'}
+        textTypeSelect = textTypeDict[self.textTypeCB.currentText()]
+
+        pathName = fname + '/**/*' + textTypeSelect
+
+        global filesList
+        filesList = glob.glob(pathName, recursive=True)
+
+        fileListPrint = ''
+
+        for file in filesList:
+            fileListPrint += file + '\n'
+
+        self.locList.setText(fileListPrint)
+
+    def loadDataDict(self):
+
+        head = self.headerLineSB.value() - 1
+        start_data = self.dataLineSB.value() - 1
+        sepInDict = {'Tab': '\t', 'Comma': ',', 'Space': ' ', 'Semicolon': ';'}
+        sepInSelect = sepInDict[self.sepInCB.currentText()]
+
+        dummy = []
+
+        for file in filesList:
+            raw = pd.read_csv(file, sep=sepInSelect, header=head)
+            raw = raw.iloc[start_data:, 0:]
+
+            dummy.append(raw)
+
+        global merged
+        merged = pd.concat(dummy, ignore_index=True, sort=False)
+
+        return merged
+
+    def loadAction(self):
+
+        raw = self.loadDataDict()
+
+        if self.showState.text() == 'Show All Data to Table':
+            data = raw
+        else:
+            data = raw.head(100)
+
+        self.indexCB.clear()
+        self.indexCB.addItems(data.columns)
+
+        self.table.setColumnCount(len(data.columns))
+        self.table.setRowCount(len(data.index))
+
+        for h in range(len(data.columns)):
+            self.table.setHorizontalHeaderItem(h, QTableWidgetItem(data.columns[h]))
+
+        for i in range(len(data.index)):
+            for j in range(len(data.columns)):
+                self.table.setItem(i, j, QTableWidgetItem(str(data.iloc[i, j])))
+
+        self.table.resizeRowsToContents()
+        self.table.resizeColumnsToContents()
 
 
     def savePathDialog(self):
@@ -134,18 +271,19 @@ class MergeData(QWidget):
 
     def startMerge(self):
 
-        input_dict = self.inputDict()
-        save_file = input_dict['save']
-        merged = self.merge()
+        save_file = self.saveLocLineForm.text()
+        sepOutDict = {'Tab': '\t', 'Comma': ',', 'Space': ' ', 'Semicolon': ';'}
+        sepOutSelect = sepOutDict[self.sepOutCB.currentText()]
+        data = merged
 
-        merged.to_csv(save_file, sep='\t')
+        data.to_csv(save_file, sep=sepOutSelect)
 
-        if save_file:
-            f = open(save_file, 'r')
+        # if save_file:
+        #     f = open(save_file, 'r')
 
-            with f:
-                data = f.read()
-                self.dataFrame.setText(data)
+        #     with f:
+        #         data = f.read()
+        #         self.dataFrame.setText(data)
 
 
 

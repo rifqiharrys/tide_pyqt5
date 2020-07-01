@@ -315,7 +315,9 @@ class TideWidget(QWidget):
         else:
             data = raw.head(100)
 
+        self.timeHeaderCB.clear()
         self.timeHeaderCB.addItems(data.columns)
+        self.depthHeaderCB.clear()
         self.depthHeaderCB.addItems(data.columns)
 
         self.table.setColumnCount(len(data.columns))

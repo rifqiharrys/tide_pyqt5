@@ -38,15 +38,20 @@ class MergeData(QWidget):
         saveLocButton.clicked.connect(self.savePathDialog)
         self.saveLocLineForm = QLineEdit()
 
-        startButton =  QPushButton('Start Merge')
-        startButton.clicked.connect(self.startMerge)
-        startButton.clicked.connect(self.close)
-
         self.table = QTableWidget()
         scroll = QScrollArea()
         scroll.setWidget(self.table)
 
         self.dataFrame = QTextBrowser()
+
+        # self.closeCheckBox = QCheckBox('Close After Merging Data')
+        # self.closeCheckBox.setChecked(True)
+        # self.closeCheckBox.toggled.connect(self.closeCheckBoxState)
+        # self.closeState = QLabel()
+
+        self.startButton =  QPushButton('Start Merge')
+        self.startButton.clicked.connect(self.startMerge)
+        self.startButton.clicked.connect(self.close)
 
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(self.close)
@@ -59,15 +64,25 @@ class MergeData(QWidget):
         grid.addWidget(self.sepOutCB, 1, 4, 1, 1)
 
         grid.addWidget(saveLocButton, 2, 1, 1, 1)
-        grid.addWidget(self.saveLocLineForm, 2, 2, 1, 2)
-        grid.addWidget(startButton, 2, 4, 1, 1)
+        grid.addWidget(self.saveLocLineForm, 2, 2, 1, 3)
 
         grid.addWidget(self.table, 3, 1, 97, 4)
 
         vbox.addStretch(1)
         grid.addLayout(vbox, 101, 1)
+        # grid.addWidget(self.closeCheckBox, 102, 1, 1, 2)
+        grid.addWidget(self.startButton, 102, 3, 1, 1)
         grid.addWidget(closeButton, 102, 4, 1, 1)
         self.setLayout(grid)
+
+
+    # def closeCheckBoxState(self):
+
+    #     if self.closeCheckBox.isChecked() == True:
+    #         self.closeState.setText(self.closeCheckBox.text())
+    #     else:
+    #         self.closeState.setText('unchecked')
+
 
     def loadDataDialog(self):
 

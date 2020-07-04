@@ -204,15 +204,15 @@ class MergeData(QWidget):
         dummy = []
 
         for file in filesList:
-            raw = pd.read_csv(file, sep=sepInSelect, header=head)
-            raw = raw.iloc[start_data:, 0:]
+            raw_single = pd.read_csv(file, sep=sepInSelect, header=head)
+            raw_single = raw_single.iloc[start_data:, 0:]
 
-            dummy.append(raw)
+            dummy.append(raw_single)
 
-        global merged
-        merged = pd.concat(dummy, ignore_index=True, sort=False)
+        global raw
+        raw = pd.concat(dummy, ignore_index=True, sort=False)
 
-        return merged
+        return raw
 
     def loadAction(self):
 
@@ -250,7 +250,7 @@ class MergeData(QWidget):
         save_file = self.saveLocLineForm.text()
         sepOutDict = {'Tab': '\t', 'Comma': ',', 'Semicolon': ';'}
         sepOutSelect = sepOutDict[self.sepOutCB.currentText()]
-        data = merged
+        data = raw.copy()
 
         data.to_csv(save_file, sep=sepOutSelect, index=False)
 

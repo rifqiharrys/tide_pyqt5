@@ -295,15 +295,15 @@ class TideWidget(QWidget):
         dummy = []
 
         for file in filesList:
-            raw = pd.read_csv(file, sep=sepSelect, header=head)
-            raw = raw.iloc[start_data:, 0:]
+            raw_single = pd.read_csv(file, sep=sepSelect, header=head)
+            raw_single = raw_single.iloc[start_data:, 0:]
 
-            dummy.append(raw)
+            dummy.append(raw_single)
 
-        global merged
-        merged = pd.concat(dummy, ignore_index=True, sort=False)
+        global raw
+        raw = pd.concat(dummy, ignore_index=True, sort=False)
 
-        return merged
+        return raw
 
 
     def loadAction(self):
@@ -349,7 +349,7 @@ class TideWidget(QWidget):
 
     def inputDict1(self):
 
-        data = merged
+        data = raw.copy()
 
         time = self.timeHeaderCB.currentText()
         depth = self.depthHeaderCB.currentText()

@@ -161,9 +161,9 @@ class MergeData(QWidget):
     def filesDialog(self):
 
         home_dir = str(Path.home())
-        fileFilter = 'Text Files (*.txt *.csv *.dat)'
-        fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir, fileFilter)
-
+        fileFilter = 'All Files (*.*) ;; Text Files (*.txt) ;; Comma Separated Value (*.csv) ;; DAT Files (*.dat)'
+        selectedFilter = 'Text Files (*.txt)'
+        fname = QFileDialog.getOpenFileNames(self, 'Open File(s)', home_dir, fileFilter, selectedFilter)
         global filesList
         filesList = fname[0]
 

@@ -524,6 +524,7 @@ class TideWidget(QWidget):
         elif method == 'U Tide':
             p_dict = prediction['prediction']
             water_level = p_dict['h']
+            print(p_dict)
 
         predic_out = pd.DataFrame({'Time':time, 'Depth':water_level})
 
@@ -533,9 +534,7 @@ class TideWidget(QWidget):
             text_edit = '_' + method + '.txt'
             save_file = save_file.replace('.txt', text_edit)
 
-            predic_out.index = predic_out['Time']
-            predic_out = predic_out.iloc[:, 1:2]
-            predic_out.to_csv(save_file, sep='\t')
+            predic_out.to_csv(save_file, sep='\t', index=False)
         else:
             pass
 

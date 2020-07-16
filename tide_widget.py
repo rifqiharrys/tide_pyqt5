@@ -585,7 +585,7 @@ class TideWidget(QWidget):
         time_num = date2num(at.to_pydatetime())
         latitude = input_dict2['latitude']
 
-        coef = solve(time_num, ad, lat=latitude, trend=False)
+        coef = solve(time_num, ad, lat=latitude, trend=False, method='robust')
 
         return coef
 

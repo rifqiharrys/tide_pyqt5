@@ -106,12 +106,12 @@ class TideWidget(QWidget):
         self.saveCheckBox = QCheckBox('Save Prediction')
         self.saveCheckBox.setChecked(True)
         self.saveCheckBox.toggled.connect(self.checkBox)
-        self.saveState = QLabel()
+        self.saveState = QLabel(self.saveCheckBox.text())
 
         self.plotCheckBox = QCheckBox('Plot Prediction')
         self.plotCheckBox.setChecked(True)
         self.plotCheckBox.toggled.connect(self.checkBox)
-        self.plotState = QLabel()
+        self.plotState = QLabel(self.plotCheckBox.text())
 
 
         howToButton = QPushButton('How To Use')
@@ -524,7 +524,6 @@ class TideWidget(QWidget):
         elif method == 'U Tide':
             p_dict = prediction['prediction']
             water_level = p_dict['h']
-            print(p_dict)
 
         predic_out = pd.DataFrame({'Time':time, 'Depth':water_level})
 

@@ -19,6 +19,7 @@ register_matplotlib_converters()
 import tide_merge
 from statistics import mode
 import glob
+import datetime
 
 
 
@@ -361,39 +362,45 @@ class TideWidget(QWidget):
 
         time_array = data.index
 
-        time_diff_list = []
+        start_time = time_array[:-1]
+        end_time = time_array[1:]
+        time_diff_array = end_time - start_time
 
-        t_length = len(time_array)
-        for i in range(t_length):
-            if i < t_length - 1:
-                time_diff_1 = time_array[i + 1]-time_array[i]
-            else:
-                pass
-
-            time_diff_list.append(time_diff_1)
-
-        time_diff = mode(time_diff_list)
+        time_diff = mode(time_diff_array)
         time_diff_float = np.timedelta64(time_diff, 'm').astype('float64')
+
+        time_gap_div = np.where((time_diff_array > time_diff) & (time_diff_array % time_diff / time_diff == 0))
+        time_gap_undiv = np.where((time_diff_array > time_diff) & (time_diff_array % time_diff / time_diff != 0))
+
+        start_gap_div = start_time[time_gap_div] + time_diff
+        end_gap_div = end_time[time_gap_div] - time_diff
+
+        start_gap_undiv = start_time[time_gap_undiv] + time_diff
+        end_gap_undiv = end_time[time_gap_undiv]
 
         data_dummy = []
 
-        for i in range(t_length):
-            if i < t_length - 1:
-                time_diff_2 = time_array[i + 1]-time_array[i]
-                if time_diff_2 > time_diff:
-                    if time_diff_2 % time_diff / time_diff == 0:
-                        time_add = pd.date_range(start=time_array[i] + time_diff, end=time_array[i + 1] - time_diff, freq=time_diff)
-                    else:
-                        time_add = pd.date_range(start=time_array[i] + time_diff, end=time_array[i + 1], freq=time_diff)
-
-                    nan_add = pd.DataFrame({time:time_add, depth:pd.Series(np.nan, index=list(range(len(time_add))))})
-                    nan_add.index = nan_add[time]
-                    nan_add = nan_add.iloc[:, 1:]
-                    data_dummy.append(nan_add)
-                else:
-                    pass
-            else:
+        for i in range(len(start_gap_div)):
+            if time_gap_div == []:
                 pass
+            else:
+                time_add_a = pd.date_range(start=start_gap_div[i], end=end_gap_div[i], freq=time_diff)
+
+                nan_add_a = pd.DataFrame({time:time_add_a, depth:pd.Series(np.nan, index=list(range(len(time_add_a))))})
+                nan_add_a.index = nan_add_a[time]
+                nan_add_a = nan_add_a.iloc[:, 1:]
+                data_dummy.append(nan_add_a)
+
+        for i in range(len(start_gap_undiv)):
+            if time_gap_undiv == []:
+                pass
+            else:
+                time_add_a = pd.date_range(start=start_gap_undiv[i], end=end_gap_undiv[i], freq=time_diff)
+
+                nan_add_a = pd.DataFrame({time: time_add_a, depth: pd.Series(np.nan, index=list(range(len(time_add_a))))})
+                nan_add_a.index = nan_add_a[time]
+                nan_add_a = nan_add_a.iloc[:, 1:]
+                data_dummy.append(nan_add_a)
 
         data_add = pd.concat(data_dummy, sort=True)
         filled = pd.concat([data, data_add], sort=True)

@@ -498,7 +498,7 @@ class TideWidget(QWidget):
         method = self.methodLabel.text()
         coef = method_dict[method]()
 
-        # method = method.replace(' ', '-')
+        method = method.replace(' ', '-')
         # text_edit = '_' + method + '_report.txt'
         # save_file = save_file.replace('.txt', text_edit)
 

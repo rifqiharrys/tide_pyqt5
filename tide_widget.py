@@ -498,9 +498,9 @@ class TideWidget(QWidget):
         method = self.methodLabel.text()
         coef = method_dict[method]()
 
-        method = method.replace(' ', '-')
-        text_edit = '_' + method + '_report.txt'
-        save_file = save_file.replace('.txt', text_edit)
+        # method = method.replace(' ', '-')
+        # text_edit = '_' + method + '_report.txt'
+        # save_file = save_file.replace('.txt', text_edit)
 
         if method == 'T-Tide':
             print_coef = t_utils.pandas_style(coef)
@@ -536,9 +536,9 @@ class TideWidget(QWidget):
 
 
         if self.saveState.text() == 'Save Prediction':
-            method = method.replace(' ', '-')
-            text_edit = '_' + method + '.txt'
-            save_file = save_file.replace('.txt', text_edit)
+            # method = method.replace(' ', '-')
+            # text_edit = '_' + method + '.txt'
+            # save_file = save_file.replace('.txt', text_edit)
 
             predic_out.to_csv(save_file, sep='\t', index=False)
         else:

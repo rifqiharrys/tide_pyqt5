@@ -384,23 +384,23 @@ class TideWidget(QWidget):
             if time_gap_div == []:
                 pass
             else:
-                time_add_a = pd.date_range(start=start_gap_div[i], end=end_gap_div[i], freq=time_diff)
+                time_add = pd.date_range(start=start_gap_div[i], end=end_gap_div[i], freq=time_diff)
 
-                nan_add_a = pd.DataFrame({time:time_add_a, depth:pd.Series(np.nan, index=list(range(len(time_add_a))))})
-                nan_add_a.index = nan_add_a[time]
-                nan_add_a = nan_add_a.iloc[:, 1:]
-                data_dummy.append(nan_add_a)
+                nan_add = pd.DataFrame({time:time_add, depth:pd.Series(np.nan, index=list(range(len(time_add))))})
+                nan_add.index = nan_add[time]
+                nan_add = nan_add.iloc[:, 1:]
+                data_dummy.append(nan_add)
 
         for i in range(len(start_gap_undiv)):
             if time_gap_undiv == []:
                 pass
             else:
-                time_add_a = pd.date_range(start=start_gap_undiv[i], end=end_gap_undiv[i], freq=time_diff)
+                time_add = pd.date_range(start=start_gap_undiv[i], end=end_gap_undiv[i], freq=time_diff)
 
-                nan_add_a = pd.DataFrame({time: time_add_a, depth: pd.Series(np.nan, index=list(range(len(time_add_a))))})
-                nan_add_a.index = nan_add_a[time]
-                nan_add_a = nan_add_a.iloc[:, 1:]
-                data_dummy.append(nan_add_a)
+                nan_add = pd.DataFrame({time: time_add, depth: pd.Series(np.nan, index=list(range(len(time_add))))})
+                nan_add.index = nan_add[time]
+                nan_add = nan_add.iloc[:, 1:]
+                data_dummy.append(nan_add)
 
         data_add = pd.concat(data_dummy, sort=True)
         filled = pd.concat([data, data_add], sort=True)

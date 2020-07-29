@@ -32,6 +32,7 @@ class TideWidget(QWidget):
 
 
     def mergeData(self):
+        '''Calling data merger (tide_merge.py)'''
 
         tide_merge.main()
 
@@ -342,6 +343,7 @@ class TideWidget(QWidget):
 
 
     def savePathDialog(self):
+        '''Save file dialog'''
 
         home_dir = str(Path.home())
         fname = QFileDialog.getSaveFileName(self, 'Save File', home_dir, 'Text files (*.txt)')
@@ -350,7 +352,8 @@ class TideWidget(QWidget):
 
 
     def str2bool(self, v):
-        
+        '''Transform string to boolean'''
+
         return v in ('True')
 
 
@@ -644,6 +647,7 @@ class TideWidget(QWidget):
 
 
     def showPredicDialog(self, data):
+        '''Showing prediction data in a form of table'''
 
         showPredic = QDialog()
         showPredic.setWindowTitle('Tide Prediction')
@@ -677,6 +681,7 @@ class TideWidget(QWidget):
 
 
     def howToDialog(self):
+        '''How to use the GUI'''
 
         howTo = QDialog()
         howTo.setWindowTitle('How to Use')
@@ -699,6 +704,7 @@ class TideWidget(QWidget):
 
 
     def aboutDialog(self):
+        '''About the GUI'''
 
         about = QDialog()
         about.setWindowTitle('About')

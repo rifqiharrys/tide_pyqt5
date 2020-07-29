@@ -37,6 +37,7 @@ class TideWidget(QWidget):
 
 
     def initUI(self):
+        '''Main Widget UI'''
 
         self.setGeometry(300, 100, 480, 640)
         self.setWindowTitle('Tide Analysis and Prediction GUI')
@@ -172,6 +173,7 @@ class TideWidget(QWidget):
 
 
     def loadDataDialog(self):
+        '''Load Data Widget UI'''
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
@@ -248,6 +250,7 @@ class TideWidget(QWidget):
 
 
     def filesDialog(self):
+        '''Load from files Dialog'''
 
         home_dir = str(Path.home())
         fileFilter = 'All Files (*.*) ;; Text Files (*.txt) ;; Comma Separated Value (*.csv) ;; DAT Files (*.dat)'
@@ -266,6 +269,7 @@ class TideWidget(QWidget):
 
 
     def folderDialog(self):
+        '''Load from folder Dialog'''
 
         home_dir = str(Path.home())
         fname = QFileDialog.getExistingDirectory(self, 'Open Folder', home_dir)
@@ -287,6 +291,7 @@ class TideWidget(QWidget):
 
 
     def loadDataDict(self):
+        '''Raw data merger'''
 
         head = self.headerLineSB.value() - 1
         start_data = self.dataLineSB.value() - 1
@@ -308,6 +313,7 @@ class TideWidget(QWidget):
 
 
     def loadAction(self):
+        '''Data loader into Main Widget table'''
 
         raw = self.loadDataDict()
 
@@ -349,6 +355,10 @@ class TideWidget(QWidget):
 
 
     def inputDict1(self):
+        '''
+        Dictionary 1 containing pre-processed time and depth values and time interval between records.
+        Processing initial input value from Main Widget 
+        '''
 
         data = raw.copy()
 
@@ -414,6 +424,10 @@ class TideWidget(QWidget):
 
 
     def inputDict2(self):
+        '''
+        Dictionary 2 containing pre-processed analysis inputs 
+        (i.e latitude, predicted time, and save file location)
+        '''
 
         startcal_string = self.startcal.selectedDate().toString(Qt.ISODate)
         endcal_string = self.endcal.selectedDate().toString(Qt.ISODate)
@@ -438,6 +452,7 @@ class TideWidget(QWidget):
 
 
     def plotLoad(self):
+        '''Observation data plotter'''
 
         input_dict = self.inputDict1()
 
@@ -453,6 +468,7 @@ class TideWidget(QWidget):
 
 
     def plotPredic(self, water_level, msl):
+        '''Predicted data plotter'''
 
         input_dict2 = self.inputDict2()
 
@@ -490,6 +506,7 @@ class TideWidget(QWidget):
 
 
     def analyse(self):
+        '''Analysis processing and reporting correspond to selected method'''
 
         input_dict2 = self.inputDict2()
         save_file = input_dict2['save']
@@ -516,6 +533,7 @@ class TideWidget(QWidget):
 
 
     def predict(self):
+        '''Prediction (analysis included) processing correspond to selected method'''
 
         input_dict2 = self.inputDict2()
         save_file = input_dict2['save']
@@ -554,6 +572,7 @@ class TideWidget(QWidget):
 
 
     def ttideAnalyse(self):
+        '''T Tide Analysis processing'''
 
         input_dict1 = self.inputDict1()
         input_dict2 = self.inputDict2()
@@ -569,6 +588,7 @@ class TideWidget(QWidget):
 
 
     def ttidePredict(self):
+        '''T Tide Prediction processing'''
 
         input_dict2 = self.inputDict2()
 
@@ -583,6 +603,7 @@ class TideWidget(QWidget):
 
 
     def utideAnalyse(self):
+        '''U Tide Analysis processing'''
 
         input_dict1 = self.inputDict1()
         input_dict2 = self.inputDict2()
@@ -598,6 +619,7 @@ class TideWidget(QWidget):
 
 
     def utidePredict(self):
+        '''U Tide Prediction processing'''
 
         input_dict2 = self.inputDict2()
 

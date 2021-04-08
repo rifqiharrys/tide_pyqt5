@@ -41,7 +41,7 @@ class TideWidget(QWidget):
 
         self.setGeometry(300, 100, 480, 640)
         self.setWindowTitle('Tide Analysis and Prediction GUI')
-        self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        self.setWindowIcon(QIcon('icons/wave-pngrepo-com.png'))
 
         loadFilesButton = QPushButton('Load Data')
         loadFilesButton.clicked.connect(self.loadDataDialog)
@@ -177,7 +177,7 @@ class TideWidget(QWidget):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
-        loadData.setWindowIcon(QIcon('load-pngrepo-com.png'))
+        loadData.setWindowIcon(QIcon('icons/load-pngrepo-com.png'))
 
         openFilesButton = QPushButton('Open File(s)')
         openFilesButton.clicked.connect(self.filesDialog)
@@ -650,7 +650,7 @@ class TideWidget(QWidget):
 
         showPredic = QDialog()
         showPredic.setWindowTitle('Tide Prediction')
-        showPredic.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        showPredic.setWindowIcon(QIcon('icons/wave-pngrepo-com.png'))
         showPredic.resize(320, 720)
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(showPredic.close)
@@ -684,7 +684,7 @@ class TideWidget(QWidget):
 
         howTo = QDialog()
         howTo.setWindowTitle('How to Use')
-        howTo.setWindowIcon(QIcon('question-pngrepo-com.png'))
+        howTo.setWindowIcon(QIcon('icons/question-pngrepo-com.png'))
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(howTo.close)
 
@@ -707,7 +707,7 @@ class TideWidget(QWidget):
 
         about = QDialog()
         about.setWindowTitle('About')
-        about.setWindowIcon(QIcon('information-pngrepo-com.png'))
+        about.setWindowIcon(QIcon('icons/information-pngrepo-com.png'))
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(about.close)
 

@@ -19,6 +19,7 @@ register_matplotlib_converters()
 import tide_merge
 from statistics import mode
 import glob
+import os
 
 
 def resource_path(relative_path):

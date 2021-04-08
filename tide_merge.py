@@ -12,6 +12,16 @@ import glob
 import os
 
 
+def resource_path(relative_path):
+    '''Get the absolute path to the resource, works for dev and for PyInstaller'''
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
 
 class MergeData(QWidget):
 
@@ -25,7 +35,7 @@ class MergeData(QWidget):
 
         self.resize(480, 640)
         self.setWindowTitle('Merge Data GUI')
-        self.setWindowIcon(QIcon('wave-pngrepo-com.png'))
+        self.setWindowIcon(QIcon(resource_path('icons/wave-pngrepo-com.png')))
 
         loadFilesButton = QPushButton('Load Data')
         loadFilesButton.clicked.connect(self.loadDataDialog)
@@ -88,7 +98,7 @@ class MergeData(QWidget):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
-        loadData.setWindowIcon(QIcon('load-pngrepo-com.png'))
+        loadData.setWindowIcon(QIcon(resource_path('icons/load-pngrepo-com.png')))
 
         openFilesButton = QPushButton('Open File(s)')
         openFilesButton.clicked.connect(self.filesDialog)

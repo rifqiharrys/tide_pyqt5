@@ -21,6 +21,16 @@ from statistics import mode
 import glob
 
 
+def resource_path(relative_path):
+    '''Get the absolute path to the resource, works for dev and for PyInstaller'''
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
 
 class TideWidget(QWidget):
 
@@ -41,7 +51,7 @@ class TideWidget(QWidget):
 
         self.setGeometry(300, 100, 480, 640)
         self.setWindowTitle('Tide Analysis and Prediction GUI')
-        self.setWindowIcon(QIcon('icons/wave-pngrepo-com.png'))
+        self.setWindowIcon(QIcon(resource_path('icons/wave-pngrepo-com.png')))
 
         loadFilesButton = QPushButton('Load Data')
         loadFilesButton.clicked.connect(self.loadDataDialog)
@@ -177,7 +187,7 @@ class TideWidget(QWidget):
 
         loadData = QDialog()
         loadData.setWindowTitle('Load Data')
-        loadData.setWindowIcon(QIcon('icons/load-pngrepo-com.png'))
+        loadData.setWindowIcon(QIcon(resource_path('icons/load-pngrepo-com.png')))
 
         openFilesButton = QPushButton('Open File(s)')
         openFilesButton.clicked.connect(self.filesDialog)
@@ -650,7 +660,7 @@ class TideWidget(QWidget):
 
         showPredic = QDialog()
         showPredic.setWindowTitle('Tide Prediction')
-        showPredic.setWindowIcon(QIcon('icons/wave-pngrepo-com.png'))
+        showPredic.setWindowIcon(QIcon(resource_path('icons/wave-pngrepo-com.png')))
         showPredic.resize(320, 720)
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(showPredic.close)
@@ -684,7 +694,7 @@ class TideWidget(QWidget):
 
         howTo = QDialog()
         howTo.setWindowTitle('How to Use')
-        howTo.setWindowIcon(QIcon('icons/question-pngrepo-com.png'))
+        howTo.setWindowIcon(QIcon(resource_path('icons/question-pngrepo-com.png')))
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(howTo.close)
 
@@ -707,7 +717,7 @@ class TideWidget(QWidget):
 
         about = QDialog()
         about.setWindowTitle('About')
-        about.setWindowIcon(QIcon('icons/information-pngrepo-com.png'))
+        about.setWindowIcon(QIcon(resource_path('icons/information-pngrepo-com.png')))
         closeButton = QPushButton('Close')
         closeButton.clicked.connect(about.close)
 

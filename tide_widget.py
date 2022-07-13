@@ -134,7 +134,7 @@ class TideWidget(QWidget):
 
         grid = QGridLayout()
         vbox = QVBoxLayout()
-        
+
         grid.addWidget(loadFilesButton, 1, 1, 1, 2)
         grid.addWidget(mergeButton, 1, 3, 1, 2)
 
@@ -370,7 +370,7 @@ class TideWidget(QWidget):
     def inputDict1(self):
         '''
         Dictionary 1 containing pre-processed time and depth values and time interval between records.
-        Processing initial input value from Main Widget 
+        Processing initial input value from Main Widget
         '''
 
         data = raw.copy()
@@ -425,8 +425,11 @@ class TideWidget(QWidget):
                 nan_add = nan_add.iloc[:, 1:]
                 data_dummy.append(nan_add)
 
-        data_add = pd.concat(data_dummy, sort=True)
-        filled = pd.concat([data, data_add], sort=True)
+        if len(data_dummy) > 0:
+            data_add = pd.concat(data_dummy, sort=True)
+            filled = pd.concat([data, data_add], sort=True)
+        else:
+            filled = data.copy()
         filled = filled.sort_index()
         time_array2 = filled.index
         depth_array2 = filled[depth].values
@@ -438,7 +441,7 @@ class TideWidget(QWidget):
 
     def inputDict2(self):
         '''
-        Dictionary 2 containing pre-processed analysis inputs 
+        Dictionary 2 containing pre-processed analysis inputs
         (i.e latitude, predicted time, and save file location)
         '''
 
@@ -537,8 +540,8 @@ class TideWidget(QWidget):
             report = open(save_file, 'w')
             report.write(print_coef)
         elif method == 'U-Tide':
-            print_coef = pd.DataFrame({'name': coef.name, 'frq': coef.aux.frq, 'lind': coef.aux.lind, 
-            'A': coef.A, 'g': coef.g, 'A_ci': coef.A_ci, 'g_ci': coef.g_ci, 'PE': coef.diagn['PE'], 
+            print_coef = pd.DataFrame({'name': coef.name, 'frq': coef.aux.frq, 'lind': coef.aux.lind,
+            'A': coef.A, 'g': coef.g, 'A_ci': coef.A_ci, 'g_ci': coef.g_ci, 'PE': coef.diagn['PE'],
             'SNR': coef.diagn['SNR']})
             print_coef.index = print_coef['name']
             print_coef = print_coef.iloc[:, 1:]
@@ -725,29 +728,29 @@ class TideWidget(QWidget):
         aboutText = '''<body>
         This is a tidal analysis GUI using T Tide and U Tide (both Python version).
         <br><\br><br><\br>
-        The GUI itself was developed by 
-        <a href=\'https://github.com/rifqiharrys/tide_pyqt5'>Rifqi Muhammad Harrys</a> 
+        The GUI itself was developed by
+        <a href=\'https://github.com/rifqiharrys/tide_pyqt5'>Rifqi Muhammad Harrys</a>
         using PyQt5, a python GUI library.
         <br><\br><br><\br>
         Both T Tide and U Tide developed by two different entities.
         <br><\br>
-        The original versions of <a href=\'https://www.eoas.ubc.ca/~rich/#T_Tide'>T Tide</a> and 
-        <a href=\'https://www.mathworks.com/matlabcentral/fileexchange/46523-utide-unified-tidal-analysis-and-prediction-functions?w.mathworks.com'>U Tide</a> 
+        The original versions of <a href=\'https://www.eoas.ubc.ca/~rich/#T_Tide'>T Tide</a> and
+        <a href=\'https://www.mathworks.com/matlabcentral/fileexchange/46523-utide-unified-tidal-analysis-and-prediction-functions?w.mathworks.com'>U Tide</a>
         are in MATLAB language developed by R. Pawlowicz et. al (T Tide) and Daniel Codiga (U Tide).<br><\br><br><\br>
-        The python version of <a href=\'https://github.com/moflaher/ttide_py'>T Tide</a> and 
+        The python version of <a href=\'https://github.com/moflaher/ttide_py'>T Tide</a> and
         <a href=\'https://github.com/wesleybowman/UTide'>U Tide</a> were developed by moflaher (T Tide) and Wesley Bowman (U Tide).
         <br><\br><br><\br>
-        A description of the theoretical basis of the analysis and some implementation details 
+        A description of the theoretical basis of the analysis and some implementation details
         of T Tide and U Tide Matlab version can be found in:
         </body>'''
 
         tideCite = '''
-        <cite>R. Pawlowicz, B. Beardsley, and S. Lentz, 
-        "Classical tidal harmonic analysis including error estimates in MATLAB using 
+        <cite>R. Pawlowicz, B. Beardsley, and S. Lentz,
+        "Classical tidal harmonic analysis including error estimates in MATLAB using
         T_TIDE", Computers and Geosciences 28 (2002), 929-937.</cite>
         <br><\br><br><\br>
-        <cite>Codiga, D.L., 2011. Unified Tidal Analysis and Prediction Using the 
-        UTide Matlab Functions. Technical Report 2011-01. Graduate School of Oceanography, 
+        <cite>Codiga, D.L., 2011. Unified Tidal Analysis and Prediction Using the
+        UTide Matlab Functions. Technical Report 2011-01. Graduate School of Oceanography,
         University of Rhode Island, Narragansett, RI. 59pp.</cite>
         '''
 
